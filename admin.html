@@ -1,115 +1,486 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MOCHA 管理画面</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOCA 管理画面</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0d0d0d;
-      color: white;
+      background: #f7f7f7;
+      color: #111;
     }
 
     header {
-      padding: 20px;
-      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #111;
+      color: #fff;
+      padding: 16px 14px;
+      border-bottom: 1px solid #222;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 69px;
+      z-index: 99;
+      background: #fff;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+    }
+
+    .top-bar button {
+      border: 1px solid #ccc;
+      background: #fff;
+      color: #111;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .top-bar button.active {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 12px;
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .summary-card {
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .summary-card .label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .summary-card .value {
       font-size: 20px;
       font-weight: bold;
-      border-bottom: 1px solid #333;
     }
 
     .container {
-      padding: 20px;
+      padding: 12px;
     }
 
-    .order {
-      background: #1a1a1a;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
+    .order-group {
+      margin-bottom: 14px;
     }
 
-    .order h3 {
-      margin: 0 0 10px;
+    .group-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+      margin: 0 0 8px;
     }
 
-    .status {
-      font-size: 12px;
-      color: #aaa;
+    .order-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .order-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
       margin-bottom: 10px;
     }
 
-    button {
-      padding: 8px 12px;
-      border-radius: 8px;
+    .order-head h3 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .badge-normal { background: #111; }
+    .badge-gift { background: #8a2be2; }
+    .badge-support { background: #d97706; }
+    .badge-done { background: #16a34a; }
+    .badge-pending { background: #dc2626; }
+
+    .detail-box {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .detail-line {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      flex: 1;
+      min-width: 120px;
       border: none;
-      margin-right: 10px;
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .done {
-      background: #00c853;
-      color: white;
+    .btn-done {
+      background: #111;
+      color: #fff;
     }
 
-    .delete {
-      background: #ff1744;
-      color: white;
+    .btn-delete {
+      background: #eee;
+      color: #111;
+    }
+
+    .btn-history {
+      background: #fff;
+      color: #111;
+      border: 1px solid #ccc !important;
+    }
+
+    .empty {
+      background: #fff;
+      border: 1px dashed #ccc;
+      color: #666;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .history-section {
+      margin-top: 20px;
+      padding-top: 8px;
     }
   </style>
 </head>
-
 <body>
+  <header>
+    <h1>MOCA 管理画面</h1>
+    <p>通常注文・奢り・スタッフ応援を一覧で確認できます</p>
+  </header>
 
-<header>MOCHA 管理画面</header>
+  <div class="top-bar">
+    <button class="active" onclick="setFilter('all', this)">すべて</button>
+    <button onclick="setFilter('normal', this)">通常注文</button>
+    <button onclick="setFilter('gift', this)">奢り注文</button>
+    <button onclick="setFilter('staff_support', this)">スタッフ応援</button>
+    <button onclick="setFilter('pending', this)">未提供のみ</button>
+    <button onclick="setFilter('done', this)">提供済み</button>
+  </div>
 
-<div class="container" id="orders"></div>
+  <div class="summary">
+    <div class="summary-card">
+      <div class="label">未提供</div>
+      <div class="value" id="pendingCount">0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">提供済み</div>
+      <div class="value" id="doneCount">0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">奢り注文</div>
+      <div class="value" id="giftCount">0</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">スタッフ応援</div>
+      <div class="value" id="supportCount">0</div>
+    </div>
+  </div>
 
-<script>
-  // 仮の注文データ（あとでSupabaseに変える）
-  let orders = [
-    { id: 1, item: "Coke Beer", seat: "T1", done: false },
-    { id: 2, item: "Shandy Gaff", seat: "T2", done: false }
-  ];
+  <div class="container">
+    <div id="ordersArea"></div>
 
-  function render() {
-    const container = document.getElementById("orders");
-    container.innerHTML = "";
+    <div class="history-section">
+      <h2 style="font-size:18px; margin: 0 0 10px;">注文履歴</h2>
+      <div id="historyArea"></div>
+    </div>
+  </div>
 
-    orders.forEach(order => {
-      const div = document.createElement("div");
-      div.className = "order";
+  <script>
+    let currentFilter = "all";
 
-      div.innerHTML = `
-        <h3>${order.item}</h3>
-        <div class="status">席: ${order.seat}</div>
-        <div class="status">${order.done ? "提供済み" : "未提供"}</div>
-        <button class="done" onclick="toggle(${order.id})">
-          ${order.done ? "未提供に戻す" : "提供済みにする"}
-        </button>
-        <button class="delete" onclick="remove(${order.id})">削除</button>
-      `;
+    let orders = JSON.parse(localStorage.getItem("mocaAdminOrders")) || [];
+    let history = JSON.parse(localStorage.getItem("mocaAdminHistory")) || [];
 
-      container.appendChild(div);
-    });
-  }
+    function migrateFromCustomerHistory() {
+      const customerHistory = JSON.parse(localStorage.getItem("mocaHistory")) || [];
 
-  function toggle(id) {
-    orders = orders.map(o =>
-      o.id === id ? { ...o, done: !o.done } : o
-    );
+      if (orders.length === 0 && history.length === 0 && customerHistory.length > 0) {
+        customerHistory.forEach(orderGroup => {
+          orderGroup.items.forEach(item => {
+            orders.push({
+              id: Date.now().toString() + Math.random().toString(16).slice(2),
+              orderedAt: orderGroup.orderedAt,
+              orderTable: orderGroup.orderTable || item.fromTable || "-",
+              name: item.name,
+              mix: item.mix || "",
+              quantity: item.quantity || 1,
+              subtotal: item.subtotal || 0,
+              targetTable: item.targetTable || item.fromTable || "-",
+              fromTable: item.fromTable || orderGroup.orderTable || "-",
+              orderType: item.orderType || "normal",
+              supportMessage: item.supportMessage || "",
+              done: false
+            });
+          });
+        });
+
+        saveOrders();
+      }
+    }
+
+    function saveOrders() {
+      localStorage.setItem("mocaAdminOrders", JSON.stringify(orders));
+    }
+
+    function saveHistory() {
+      localStorage.setItem("mocaAdminHistory", JSON.stringify(history));
+    }
+
+    function typeLabel(type) {
+      if (type === "gift") return "奢り注文";
+      if (type === "staff_support") return "スタッフ応援";
+      return "通常注文";
+    }
+
+    function typeBadgeClass(type) {
+      if (type === "gift") return "badge-gift";
+      if (type === "staff_support") return "badge-support";
+      return "badge-normal";
+    }
+
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll(".top-bar button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      render();
+    }
+
+    function getFilteredOrders() {
+      if (currentFilter === "all") return orders;
+      if (currentFilter === "pending") return orders.filter(order => !order.done);
+      if (currentFilter === "done") return orders.filter(order => order.done);
+      return orders.filter(order => order.orderType === currentFilter);
+    }
+
+    function renderSummary() {
+      document.getElementById("pendingCount").textContent = orders.filter(o => !o.done).length;
+      document.getElementById("doneCount").textContent = orders.filter(o => o.done).length;
+      document.getElementById("giftCount").textContent = orders.filter(o => o.orderType === "gift").length;
+      document.getElementById("supportCount").textContent = orders.filter(o => o.orderType === "staff_support").length;
+    }
+
+    function renderOrders() {
+      const ordersArea = document.getElementById("ordersArea");
+      const filtered = getFilteredOrders();
+
+      if (filtered.length === 0) {
+        ordersArea.innerHTML = `<div class="empty">表示する注文はありません</div>`;
+        return;
+      }
+
+      let html = "";
+
+      filtered.forEach(order => {
+        html += `
+          <div class="order-card">
+            <div class="order-head">
+              <div>
+                <h3>${order.name}</h3>
+                <div class="meta">
+                  注文時刻: ${order.orderedAt}<br>
+                  注文元: Table ${order.fromTable}
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:18px; font-weight:bold;">¥${Number(order.subtotal).toLocaleString()}</div>
+              </div>
+            </div>
+
+            <div class="badge-row">
+              <span class="badge ${typeBadgeClass(order.orderType)}">${typeLabel(order.orderType)}</span>
+              <span class="badge ${order.done ? 'badge-done' : 'badge-pending'}">${order.done ? '提供済み' : '未提供'}</span>
+            </div>
+
+            <div class="detail-box">
+              <div class="detail-line">数量: ${order.quantity}</div>
+              ${order.mix ? `<div class="detail-line">割り方: ${order.mix}</div>` : ""}
+              ${order.orderType === "normal" ? `<div class="detail-line">届け先: Table ${order.targetTable}</div>` : ""}
+              ${order.orderType === "gift" ? `<div class="detail-line">届け先: Table ${order.targetTable}（Table ${order.fromTable} からの奢り）</div>` : ""}
+              ${order.orderType === "staff_support" ? `<div class="detail-line">区分: スタッフ応援</div>` : ""}
+              ${order.orderType === "staff_support" && order.supportMessage ? `<div class="detail-line">メッセージ: ${escapeHtml(order.supportMessage)}</div>` : ""}
+            </div>
+
+            <div class="actions">
+              <button class="btn-done" onclick="toggleDone('${order.id}')">
+                ${order.done ? "未提供に戻す" : "提供済みにする"}
+              </button>
+              <button class="btn-delete" onclick="deleteOrder('${order.id}')">削除</button>
+            </div>
+          </div>
+        `;
+      });
+
+      ordersArea.innerHTML = html;
+    }
+
+    function renderHistory() {
+      const historyArea = document.getElementById("historyArea");
+
+      if (history.length === 0) {
+        historyArea.innerHTML = `<div class="empty">履歴はまだありません</div>`;
+        return;
+      }
+
+      let html = "";
+      history.forEach(order => {
+        html += `
+          <div class="order-card">
+            <div class="order-head">
+              <div>
+                <h3>${order.name}</h3>
+                <div class="meta">
+                  注文時刻: ${order.orderedAt}<br>
+                  注文元: Table ${order.fromTable}
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:18px; font-weight:bold;">¥${Number(order.subtotal).toLocaleString()}</div>
+              </div>
+            </div>
+
+            <div class="badge-row">
+              <span class="badge ${typeBadgeClass(order.orderType)}">${typeLabel(order.orderType)}</span>
+              <span class="badge badge-done">提供済み履歴</span>
+            </div>
+
+            <div class="detail-box">
+              <div class="detail-line">数量: ${order.quantity}</div>
+              ${order.mix ? `<div class="detail-line">割り方: ${order.mix}</div>` : ""}
+              ${order.orderType === "normal" ? `<div class="detail-line">届け先: Table ${order.targetTable}</div>` : ""}
+              ${order.orderType === "gift" ? `<div class="detail-line">届け先: Table ${order.targetTable}（Table ${order.fromTable} からの奢り）</div>` : ""}
+              ${order.orderType === "staff_support" ? `<div class="detail-line">区分: スタッフ応援</div>` : ""}
+              ${order.orderType === "staff_support" && order.supportMessage ? `<div class="detail-line">メッセージ: ${escapeHtml(order.supportMessage)}</div>` : ""}
+            </div>
+          </div>
+        `;
+      });
+
+      historyArea.innerHTML = html;
+    }
+
+    function toggleDone(id) {
+      const target = orders.find(order => order.id === id);
+      if (!target) return;
+
+      target.done = !target.done;
+
+      if (target.done) {
+        history.unshift({ ...target });
+      } else {
+        history = history.filter(h => h.id !== id);
+      }
+
+      saveOrders();
+      saveHistory();
+      render();
+    }
+
+    function deleteOrder(id) {
+      orders = orders.filter(order => order.id !== id);
+      history = history.filter(order => order.id !== id);
+      saveOrders();
+      saveHistory();
+      render();
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function render() {
+      renderSummary();
+      renderOrders();
+      renderHistory();
+    }
+
+    migrateFromCustomerHistory();
     render();
-  }
-
-  function remove(id) {
-    orders = orders.filter(o => o.id !== id);
-    render();
-  }
-
-  render();
-</script>
-
+  </script>
 </body>
 </html>
