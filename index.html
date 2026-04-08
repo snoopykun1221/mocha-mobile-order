@@ -5,74 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MOCA Mobile Order</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #111111;
+      background: #fff;
+      color: #111;
     }
-
     header {
       position: sticky;
       top: 0;
-      background: #ffffff;
-      border-bottom: 1px solid #ddd;
       z-index: 100;
-      padding: 16px 12px 10px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 14px 12px 10px;
       text-align: center;
     }
-
     header h1 {
       margin: 0;
       font-size: 28px;
       letter-spacing: 1px;
     }
-
     header p {
       margin: 6px 0 0;
       color: #666;
       font-size: 14px;
     }
-
+    .table-banner {
+      margin-top: 10px;
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #111;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+    }
     .top-buttons {
       display: flex;
       gap: 10px;
       padding: 12px;
-      border-bottom: 1px solid #eee;
       background: #fff;
+      border-bottom: 1px solid #eee;
       position: sticky;
-      top: 79px;
+      top: 98px;
       z-index: 99;
     }
-
     .top-buttons button {
       flex: 1;
       padding: 12px;
-      border: 1px solid #111;
+      border: none;
+      border-radius: 10px;
       background: #111;
       color: #fff;
-      border-radius: 10px;
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
     }
-
     .category-bar {
       display: flex;
       gap: 10px;
       overflow-x: auto;
       padding: 12px;
-      border-bottom: 1px solid #eee;
       background: #fff;
+      border-bottom: 1px solid #eee;
       position: sticky;
-      top: 141px;
+      top: 160px;
       z-index: 98;
     }
-
     .category-bar button {
       white-space: nowrap;
       border: 1px solid #ccc;
@@ -83,46 +83,39 @@
       font-size: 13px;
       cursor: pointer;
     }
-
     .category-bar button.active {
       background: #111;
       color: #fff;
       border-color: #111;
     }
-
-    .container {
-      padding: 14px;
-    }
-
+    .container { padding: 14px; }
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
     }
-
     .card {
+      position: relative;
       border: 1px solid #e5e5e5;
       border-radius: 14px;
       padding: 12px;
       background: #fff;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       cursor: pointer;
+      overflow: hidden;
     }
-
     .card img {
       width: 100%;
       height: 130px;
       object-fit: cover;
       border-radius: 12px;
-      background: #f3f3f3;
+      background: #f4f4f4;
     }
-
     .card h3 {
-      font-size: 18px;
+      font-size: 17px;
       margin: 12px 0 6px;
       line-height: 1.3;
     }
-
     .desc {
       font-size: 12px;
       color: #666;
@@ -130,13 +123,11 @@
       line-height: 1.4;
       margin-bottom: 8px;
     }
-
     .price {
       font-size: 16px;
       font-weight: bold;
       margin-bottom: 10px;
     }
-
     .card button {
       width: 100%;
       padding: 10px;
@@ -148,14 +139,40 @@
       font-weight: bold;
       cursor: pointer;
     }
+    .soldout-card { opacity: 0.55; }
+    .soldout-card button {
+      background: #999;
+      cursor: not-allowed;
+    }
+    .badge-wrap {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      z-index: 2;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .badge-recommend { background: #111; }
+    .badge-popular { background: #c40000; }
+    .badge-limited { background: #a05a00; }
+    .badge-soldout { background: #666; }
 
-    .empty-food {
-      padding: 30px 20px;
-      text-align: center;
-      color: #666;
-      border: 1px dashed #ccc;
+    .empty-food, .support-box {
+      padding: 20px;
+      border: 1px solid #e5e5e5;
       border-radius: 14px;
       background: #fafafa;
+      line-height: 1.6;
+      color: #444;
     }
 
     .modal-bg {
@@ -168,45 +185,42 @@
       justify-content: center;
       padding: 18px;
     }
-
     .modal {
       width: 100%;
-      max-width: 420px;
-      max-height: 85vh;
+      max-width: 430px;
+      max-height: 88vh;
       overflow-y: auto;
       background: #fff;
       color: #111;
       border-radius: 18px;
       padding: 18px;
     }
-
     .modal h2 {
-      margin-top: 0;
+      margin: 0 0 8px;
       font-size: 22px;
     }
-
     .modal p {
       color: #555;
       line-height: 1.5;
+      margin-top: 0;
     }
-
-    .option-group {
-      margin: 16px 0;
+    .option-group { margin: 16px 0; }
+    .option-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
     }
-
     .option-group label {
       display: block;
       margin: 8px 0;
       font-size: 15px;
     }
-
     .qty-row {
       display: flex;
       align-items: center;
       gap: 10px;
       margin: 16px 0;
     }
-
     .qty-row button {
       width: 38px;
       height: 38px;
@@ -217,20 +231,17 @@
       font-size: 18px;
       cursor: pointer;
     }
-
     .qty-number {
       min-width: 30px;
       text-align: center;
       font-size: 18px;
       font-weight: bold;
     }
-
     .modal-actions {
       display: flex;
       gap: 10px;
       margin-top: 18px;
     }
-
     .modal-actions button {
       flex: 1;
       padding: 12px;
@@ -240,36 +251,43 @@
       cursor: pointer;
       border: none;
     }
-
     .btn-main {
       background: #111;
       color: #fff;
     }
-
     .btn-sub {
       background: #eee;
       color: #111;
     }
-
-    .cart-item, .history-item {
+    .cart-item, .history-item, .confirm-item {
       border-bottom: 1px solid #eee;
       padding: 10px 0;
     }
-
-    .cart-item:last-child, .history-item:last-child {
+    .cart-item:last-child, .history-item:last-child, .confirm-item:last-child {
       border-bottom: none;
     }
-
     .small-text {
       color: #666;
       font-size: 13px;
       margin-top: 4px;
+      line-height: 1.5;
     }
-
     .total-box {
       margin: 16px 0;
       font-size: 18px;
       font-weight: bold;
+    }
+    select, textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 15px;
+    }
+    textarea {
+      min-height: 90px;
+      resize: vertical;
     }
   </style>
 </head>
@@ -277,6 +295,7 @@
   <header>
     <h1>MOCA ORDER</h1>
     <p>モバイルオーダー</p>
+    <div class="table-banner" id="tableBanner">Table 1</div>
   </header>
 
   <div class="top-buttons">
@@ -297,10 +316,26 @@
       <div class="price" id="modalPrice"></div>
 
       <div class="option-group" id="drinkOptions">
-        <strong>割り方を選択</strong>
+        <span class="option-title">割り方を選択</span>
         <label><input type="radio" name="mix" value="ロック" checked> ロック</label>
         <label><input type="radio" name="mix" value="ソーダ"> ソーダ</label>
         <label><input type="radio" name="mix" value="水割り"> 水割り</label>
+      </div>
+
+      <div class="option-group" id="giftModeWrap">
+        <span class="option-title">注文先</span>
+        <label><input type="radio" name="giftMode" value="self" checked onchange="toggleGiftTarget()"> 自分のテーブル用</label>
+        <label><input type="radio" name="giftMode" value="gift" onchange="toggleGiftTarget()"> 別テーブルに奢る</label>
+      </div>
+
+      <div class="option-group" id="giftTargetWrap" style="display:none;">
+        <span class="option-title">送り先テーブル</span>
+        <select id="giftTarget"></select>
+      </div>
+
+      <div class="option-group" id="messageWrap" style="display:none;">
+        <span class="option-title">メッセージ</span>
+        <textarea id="supportMessage" placeholder="例：接客とても良かったです！"></textarea>
       </div>
 
       <div class="qty-row">
@@ -323,7 +358,19 @@
       <div class="total-box" id="cartTotal">合計：¥0</div>
       <div class="modal-actions">
         <button class="btn-sub" onclick="closeCart()">閉じる</button>
-        <button class="btn-main" onclick="placeOrder()">この内容で注文</button>
+        <button class="btn-main" onclick="openConfirmOrder()">注文へ進む</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="confirmModalBg">
+    <div class="modal">
+      <h2>注文確認</h2>
+      <div id="confirmItems"></div>
+      <div class="total-box" id="confirmTotal">合計：¥0</div>
+      <div class="modal-actions">
+        <button class="btn-sub" onclick="closeConfirmModal()">戻る</button>
+        <button class="btn-main" onclick="placeOrder()">この内容で注文する</button>
       </div>
     </div>
   </div>
@@ -339,6 +386,11 @@
   </div>
 
   <script>
+    const tableNumber = new URLSearchParams(window.location.search).get("table") || "1";
+    document.getElementById("tableBanner").textContent = "Table " + tableNumber;
+
+    const tableOptions = Array.from({ length: 10 }, (_, i) => String(i + 1));
+
     const categories = [
       "BEER",
       "GIN & VODKA",
@@ -347,212 +399,74 @@
       "COCKTAILS",
       "OTHERS & WINE",
       "NON ALCOHOL & SOFT DRINK",
+      "STAFF SUPPORT",
       "FOOD"
     ];
 
     const items = [
-      {
-        category: "BEER",
-        name: "ハートランド生",
-        price: 800,
-        desc: "柔らかな甘さと穏やかな苦味",
-        image: "https://images.unsplash.com/photo-1563379091339-03246963d29c"
-      },
-      {
-        category: "BEER",
-        name: "ハイネケン",
-        price: 800,
-        desc: "フルーティーでさっぱり",
-        image: "https://images.unsplash.com/photo-1608270586620-248524c67de9"
-      },
-      {
-        category: "BEER",
-        name: "コロナ",
-        price: 800,
-        desc: "すっきり爽快リゾートスタイル",
-        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b"
-      },
-      {
-        category: "BEER",
-        name: "ギネス",
-        price: 800,
-        desc: "濃い琥珀色とクリーミーな泡",
-        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699"
-      },
+      { category: "BEER", name: "ハートランド生", price: 800, desc: "柔らかな甘さと穏やかな苦味", recommend: true },
+      { category: "BEER", name: "ハイネケン", price: 800, desc: "フルーティーでさっぱり" },
+      { category: "BEER", name: "コロナ", price: 800, desc: "すっきり爽快リゾートスタイル", popular: true },
+      { category: "BEER", name: "ギネス", price: 800, desc: "濃い琥珀色とクリーミーな泡", limited: true },
 
-      {
-        category: "GIN & VODKA",
-        name: "ジンベース",
-        price: 800,
-        desc: "リッキー、バック、トニック、ライム",
-        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
-      },
-      {
-        category: "GIN & VODKA",
-        name: "タンカレー / ボンベイ",
-        price: 800,
-        desc: "オン・ザ・ロック",
-        image: "https://images.unsplash.com/photo-1587223962930-cb7f31384c19"
-      },
-      {
-        category: "GIN & VODKA",
-        name: "ウォッカベース",
-        price: 800,
-        desc: "ブルドック、ソルティドッグ、モスコミュール、スクリュードライバー",
-        image: "https://images.unsplash.com/photo-1544145945-f90425340c7e"
-      },
+      { category: "GIN & VODKA", name: "ジンベース", price: 800, desc: "リッキー、バック、トニック、ライム", recommend: true },
+      { category: "GIN & VODKA", name: "タンカレー / ボンベイ", price: 800, desc: "オン・ザ・ロック" },
+      { category: "GIN & VODKA", name: "ウォッカベース", price: 800, desc: "ブルドック、ソルティドッグ、モスコミュール、スクリュードライバー", popular: true },
 
-      {
-        category: "WHISKY & BOURBON",
-        name: "ハイボール",
-        price: 700,
-        desc: "定番のハイボール",
-        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b"
-      },
-      {
-        category: "WHISKY & BOURBON",
-        name: "ビアハイボール / 梅酒ハイボール",
-        price: 800,
-        desc: "各￥800",
-        image: "https://images.unsplash.com/photo-1470337458703-46ad1756a187"
-      },
-      {
-        category: "WHISKY & BOURBON",
-        name: "バーボン",
-        price: 700,
-        desc: "アーリータイムス、ジャックダニエル、セブンクラウン等",
-        image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8"
-      },
-      {
-        category: "WHISKY & BOURBON",
-        name: "ジェームソン / バランタイン / グレングラント",
-        price: 700,
-        desc: "スコッチ・アイリッシュ",
-        image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b"
-      },
-      {
-        category: "WHISKY & BOURBON",
-        name: "タリスカー 10年",
-        price: 1200,
-        desc: "香り高い本格派",
-        image: "https://images.unsplash.com/photo-1613206485381-b028e578e5b9"
-      },
-      {
-        category: "WHISKY & BOURBON",
-        name: "ラフロイグ 10年",
-        price: 1400,
-        desc: "個性の強いスモーキー感",
-        image: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b"
-      },
+      { category: "WHISKY & BOURBON", name: "ハイボール", price: 700, desc: "定番のハイボール", popular: true },
+      { category: "WHISKY & BOURBON", name: "ビアハイボール / 梅酒ハイボール", price: 800, desc: "各￥800" },
+      { category: "WHISKY & BOURBON", name: "バーボン", price: 700, desc: "アーリータイムス、ジャックダニエル、セブンクラウン等" },
+      { category: "WHISKY & BOURBON", name: "ジェームソン / バランタイン / グレングラント", price: 700, desc: "スコッチ・アイリッシュ" },
+      { category: "WHISKY & BOURBON", name: "タリスカー 10年", price: 1200, desc: "香り高い本格派", limited: true },
+      { category: "WHISKY & BOURBON", name: "ラフロイグ 10年", price: 1400, desc: "個性の強いスモーキー感", soldOut: true },
 
-      {
-        category: "MOJITO",
-        name: "モヒート各種",
-        price: 950,
-        desc: "スタンダード、マリブ、イタリアン、パッシモ、マンゴヤン、ミドリ、ルジェカシス、ティフィン、パイナップル",
-        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
-      },
-      {
-        category: "MOJITO",
-        name: "シャルトリューズ モヒート",
-        price: 1000,
-        desc: "爽やかで贅沢な一杯",
-        image: "https://images.unsplash.com/photo-1570598912132-0ba1dc952b7d"
-      },
+      { category: "MOJITO", name: "スタンダード モヒート", price: 950, desc: "定番の爽やかなモヒート", recommend: true },
+      { category: "MOJITO", name: "マリブ モヒート", price: 950, desc: "トロピカルな香り" },
+      { category: "MOJITO", name: "イタリアン モヒート", price: 950, desc: "すっきりした飲み口" },
+      { category: "MOJITO", name: "パッシモ モヒート", price: 950, desc: "フルーティー" },
+      { category: "MOJITO", name: "マンゴヤン モヒート", price: 950, desc: "マンゴーの甘み" },
+      { category: "MOJITO", name: "ミドリ モヒート", price: 950, desc: "メロンリキュール使用" },
+      { category: "MOJITO", name: "ルジェカシス モヒート", price: 950, desc: "カシス香る一杯" },
+      { category: "MOJITO", name: "ティフィン モヒート", price: 950, desc: "紅茶系の香り" },
+      { category: "MOJITO", name: "パイナップル モヒート", price: 950, desc: "南国感たっぷり" },
+      { category: "MOJITO", name: "シャルトリューズ モヒート", price: 1000, desc: "爽やかで贅沢な一杯", limited: true },
 
-      {
-        category: "COCKTAILS",
-        name: "テキーラ",
-        price: 530,
-        desc: "ショット・ロック / サンライズ￥800",
-        image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b"
-      },
-      {
-        category: "COCKTAILS",
-        name: "カンパリ",
-        price: 700,
-        desc: "オレンジ、ソーダ、スプモーニ等",
-        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b"
-      },
-      {
-        category: "COCKTAILS",
-        name: "カシス",
-        price: 700,
-        desc: "オレンジ、グレープ、ソーダ等",
-        image: "https://images.unsplash.com/photo-1497534446932-c925b458314e"
-      },
-      {
-        category: "COCKTAILS",
-        name: "ピーチ",
-        price: 700,
-        desc: "レゲエパンチ、ファジーネーブル",
-        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
-      },
-      {
-        category: "COCKTAILS",
-        name: "ラム・マリブ",
-        price: 700,
-        desc: "ラムコーク、マリブミルク等",
-        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
-      },
-      {
-        category: "COCKTAILS",
-        name: "OTHERS",
-        price: 800,
-        desc: "チャイナブルー、スノーボール、カルーアミルク等",
-        image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39"
-      },
+      { category: "COCKTAILS", name: "テキーラ ショット・ロック", price: 530, desc: "ショットまたはロック" },
+      { category: "COCKTAILS", name: "テキーラ サンライズ", price: 800, desc: "フルーティーな定番" },
+      { category: "COCKTAILS", name: "カンパリ オレンジ", price: 700, desc: "甘苦い定番" },
+      { category: "COCKTAILS", name: "カンパリ ソーダ", price: 700, desc: "すっきり飲みやすい" },
+      { category: "COCKTAILS", name: "スプモーニ", price: 800, desc: "カンパリ系の人気カクテル" },
+      { category: "COCKTAILS", name: "カシス オレンジ", price: 700, desc: "定番人気" },
+      { category: "COCKTAILS", name: "カシス グレープ", price: 700, desc: "フルーティー" },
+      { category: "COCKTAILS", name: "カシス ソーダ", price: 700, desc: "軽やかに飲める" },
+      { category: "COCKTAILS", name: "レゲエパンチ", price: 700, desc: "ピーチ系の人気カクテル" },
+      { category: "COCKTAILS", name: "ファジーネーブル", price: 700, desc: "甘くて飲みやすい" },
+      { category: "COCKTAILS", name: "ラムコーク", price: 700, desc: "ラムの定番" },
+      { category: "COCKTAILS", name: "マリブミルク", price: 700, desc: "やさしい甘さ" },
+      { category: "COCKTAILS", name: "チャイナブルー", price: 800, desc: "華やかな香り" },
+      { category: "COCKTAILS", name: "スノーボール", price: 800, desc: "なめらかな口当たり" },
+      { category: "COCKTAILS", name: "カルーアミルク", price: 800, desc: "コーヒー風味" },
 
-      {
-        category: "OTHERS & WINE",
-        name: "梅酒ベース",
-        price: 800,
-        desc: "梅酒ビア、梅エール",
-        image: "https://images.unsplash.com/photo-1551024709-8f23befc6cf7"
-      },
-      {
-        category: "OTHERS & WINE",
-        name: "パトロンベース",
-        price: 950,
-        desc: "パトロンコーヒー、パトロンミルク",
-        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
-      },
-      {
-        category: "OTHERS & WINE",
-        name: "ワイン",
-        price: 700,
-        desc: "グラス￥700〜 / ボトル￥3,500〜",
-        image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3"
-      },
+      { category: "OTHERS & WINE", name: "梅酒ビア", price: 800, desc: "梅酒ベース" },
+      { category: "OTHERS & WINE", name: "梅エール", price: 800, desc: "梅酒ベース" },
+      { category: "OTHERS & WINE", name: "パトロンコーヒー", price: 950, desc: "パトロンベース", limited: true },
+      { category: "OTHERS & WINE", name: "パトロンミルク", price: 950, desc: "パトロンベース" },
+      { category: "OTHERS & WINE", name: "ワイン グラス", price: 700, desc: "グラスワイン" },
+      { category: "OTHERS & WINE", name: "ワイン ボトル", price: 3500, desc: "ボトルワイン", recommend: true },
 
-      {
-        category: "NON ALCOHOL & SOFT DRINK",
-        name: "ノンアルカクテル",
-        price: 600,
-        desc: "サラトガクーラー、シャーリーテンプル、ヴァージンモヒート等",
-        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
-      },
-      {
-        category: "NON ALCOHOL & SOFT DRINK",
-        name: "100%ジュース / お茶 / コーラ",
-        price: 600,
-        desc: "各￥600",
-        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
-      },
-      {
-        category: "NON ALCOHOL & SOFT DRINK",
-        name: "フロート",
-        price: 700,
-        desc: "コーラ、コーヒー",
-        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699"
-      },
-      {
-        category: "NON ALCOHOL & SOFT DRINK",
-        name: "ノンアルコールビール",
-        price: 700,
-        desc: "キリン零ICHI",
-        image: "https://images.unsplash.com/photo-1563379091339-03246963d29c"
-      }
+      { category: "NON ALCOHOL & SOFT DRINK", name: "サラトガクーラー", price: 600, desc: "ノンアルカクテル" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "シャーリーテンプル", price: 600, desc: "ノンアルカクテル" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "ヴァージンモヒート", price: 800, desc: "ノンアルカクテル" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "100%ジュース", price: 600, desc: "ソフトドリンク" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "お茶", price: 600, desc: "ソフトドリンク" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "コーラ", price: 600, desc: "ソフトドリンク" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "コーラフロート", price: 700, desc: "フロート", popular: true },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "コーヒーフロート", price: 700, desc: "フロート" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "ノンアルコールビール", price: 700, desc: "キリン零ICHI" },
+
+      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥300", price: 300, desc: "スタッフへの応援（投げ銭）です", recommend: true, support: true },
+      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥500", price: 500, desc: "スタッフへの応援（投げ銭）です", support: true, popular: true },
+      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥1,000", price: 1000, desc: "スタッフへの応援（投げ銭）です", support: true }
     ];
 
     let currentCategory = "BEER";
@@ -561,16 +475,26 @@
     let cart = JSON.parse(localStorage.getItem("mocaCart")) || [];
     let history = JSON.parse(localStorage.getItem("mocaHistory")) || [];
 
+    function setupGiftTableOptions() {
+      const select = document.getElementById("giftTarget");
+      select.innerHTML = "";
+      tableOptions.forEach(num => {
+        if (num !== tableNumber) {
+          const option = document.createElement("option");
+          option.value = num;
+          option.textContent = "Table " + num;
+          select.appendChild(option);
+        }
+      });
+    }
+
     function renderCategories() {
       const bar = document.getElementById("categoryBar");
       bar.innerHTML = "";
-
       categories.forEach(category => {
         const btn = document.createElement("button");
         btn.textContent = category;
-        if (category === currentCategory) {
-          btn.classList.add("active");
-        }
+        if (category === currentCategory) btn.classList.add("active");
         btn.onclick = () => {
           currentCategory = category;
           renderCategories();
@@ -580,35 +504,72 @@
       });
     }
 
+    function getBadges(item) {
+      let html = "";
+      if (item.recommend) html += `<span class="badge badge-recommend">おすすめ</span>`;
+      if (item.popular) html += `<span class="badge badge-popular">人気</span>`;
+      if (item.limited) html += `<span class="badge badge-limited">限定</span>`;
+      if (item.soldOut) html += `<span class="badge badge-soldout">SOLD OUT</span>`;
+      return html;
+    }
+
     function renderMenu() {
       const menuArea = document.getElementById("menuArea");
 
       if (currentCategory === "FOOD") {
-        menuArea.innerHTML = `
-          <div class="empty-food">
-            FOODは準備中です
+        menuArea.innerHTML = `<div class="empty-food">FOODは準備中です</div>`;
+        return;
+      }
+
+      if (currentCategory === "STAFF SUPPORT") {
+        let supportCards = items.filter(item => item.category === "STAFF SUPPORT");
+        let html = `
+          <div class="support-box">
+            「今日の接客、良かった！」「カクテルが美味しかった！」と思っていただけたら、スタッフへ応援（投げ銭）をいただけると励みになります。いただいたチップは全額、スタッフの研修や福利厚生に活用させていただきます。
           </div>
+          <div style="height:14px;"></div>
+          <div class="menu-grid">
         `;
+        supportCards.forEach(item => {
+          const idx = items.indexOf(item);
+          html += `
+            <div class="card" onclick="openItemModal(${idx})">
+              <div class="badge-wrap">${getBadges(item)}</div>
+              <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4" alt="${item.name}">
+              <h3>${item.name}</h3>
+              <div class="desc">${item.desc}</div>
+              <div class="price">¥${item.price.toLocaleString()}</div>
+              <button type="button">選択する</button>
+            </div>
+          `;
+        });
+        html += `</div>`;
+        menuArea.innerHTML = html;
         return;
       }
 
       const filtered = items.filter(item => item.category === currentCategory);
 
       let html = `<div class="menu-grid">`;
-      filtered.forEach((item, index) => {
+      filtered.forEach(item => {
+        const idx = items.indexOf(item);
         html += `
-          <div class="card" onclick="openItemModal(${items.indexOf(item)})">
-            <img src="${item.image}" alt="${item.name}">
+          <div class="card ${item.soldOut ? 'soldout-card' : ''}" onclick="${item.soldOut ? '' : `openItemModal(${idx})`}">
+            <div class="badge-wrap">${getBadges(item)}</div>
+            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" alt="${item.name}">
             <h3>${item.name}</h3>
             <div class="desc">${item.desc}</div>
             <div class="price">¥${item.price.toLocaleString()}</div>
-            <button type="button">選択する</button>
+            <button type="button" ${item.soldOut ? 'disabled' : ''}>${item.soldOut ? '売り切れ' : '選択する'}</button>
           </div>
         `;
       });
       html += `</div>`;
-
       menuArea.innerHTML = html;
+    }
+
+    function shouldShowMixOptions(item) {
+      return !["BEER", "NON ALCOHOL & SOFT DRINK", "STAFF SUPPORT"].includes(item.category);
     }
 
     function openItemModal(index) {
@@ -619,17 +580,28 @@
       document.getElementById("modalDesc").textContent = selectedItem.desc;
       document.getElementById("modalPrice").textContent = "¥" + selectedItem.price.toLocaleString();
 
-      const isDrink = selectedItem.category !== "FOOD";
-      document.getElementById("drinkOptions").style.display = isDrink ? "block" : "none";
+      document.getElementById("drinkOptions").style.display = shouldShowMixOptions(selectedItem) ? "block" : "none";
+      document.getElementById("giftModeWrap").style.display = selectedItem.support ? "none" : "block";
+      document.getElementById("giftTargetWrap").style.display = "none";
+      document.getElementById("messageWrap").style.display = selectedItem.support ? "block" : "none";
 
-      const firstOption = document.querySelector('input[name="mix"][value="ロック"]');
-      if (firstOption) firstOption.checked = true;
+      const mixRadio = document.querySelector('input[name="mix"][value="ロック"]');
+      if (mixRadio) mixRadio.checked = true;
 
+      const giftSelf = document.querySelector('input[name="giftMode"][value="self"]');
+      if (giftSelf) giftSelf.checked = true;
+
+      document.getElementById("supportMessage").value = "";
       document.getElementById("itemModalBg").style.display = "flex";
     }
 
     function closeItemModal() {
       document.getElementById("itemModalBg").style.display = "none";
+    }
+
+    function toggleGiftTarget() {
+      const mode = document.querySelector('input[name="giftMode"]:checked')?.value || "self";
+      document.getElementById("giftTargetWrap").style.display = mode === "gift" ? "block" : "none";
     }
 
     function changeQty(num) {
@@ -639,19 +611,45 @@
     }
 
     function addToCart() {
-      const mix = document.querySelector('input[name="mix"]:checked')?.value || "";
+      const mix = shouldShowMixOptions(selectedItem)
+        ? (document.querySelector('input[name="mix"]:checked')?.value || "")
+        : "";
+
+      const supportMessage = selectedItem.support
+        ? document.getElementById("supportMessage").value.trim()
+        : "";
+
+      const giftMode = selectedItem.support
+        ? "staff"
+        : (document.querySelector('input[name="giftMode"]:checked')?.value || "self");
+
+      const targetTable = giftMode === "gift"
+        ? document.getElementById("giftTarget").value
+        : tableNumber;
+
+      const orderType =
+        selectedItem.support ? "staff_support" :
+        giftMode === "gift" ? "gift" :
+        "normal";
+
       cart.push({
         name: selectedItem.name,
         price: selectedItem.price,
         desc: selectedItem.desc,
-        mix: mix,
-        quantity: quantity,
-        subtotal: selectedItem.price * quantity
+        mix,
+        quantity,
+        subtotal: selectedItem.price * quantity,
+        fromTable: tableNumber,
+        targetTable,
+        isGift: giftMode === "gift",
+        support: selectedItem.support || false,
+        supportMessage,
+        orderType
       });
 
       localStorage.setItem("mocaCart", JSON.stringify(cart));
       closeItemModal();
-      alert("カートに追加しました");
+      alert(selectedItem.support ? "スタッフ応援をカートに追加しました" : "カートに追加しました");
     }
 
     function openCart() {
@@ -664,16 +662,23 @@
         let html = "";
         let total = 0;
 
-        cart.forEach((item, index) => {
+        cart.forEach(item => {
           total += item.subtotal;
-          html += `
-            <div class="cart-item">
-              <strong>${item.name}</strong>
-              <div class="small-text">割り方：${item.mix || "なし"}</div>
-              <div class="small-text">数量：${item.quantity}</div>
-              <div class="small-text">小計：¥${item.subtotal.toLocaleString()}</div>
-            </div>
-          `;
+          html += `<div class="cart-item"><strong>${item.name}</strong>`;
+
+          if (item.mix) html += `<div class="small-text">割り方：${item.mix}</div>`;
+          html += `<div class="small-text">数量：${item.quantity}</div>`;
+
+          if (item.orderType === "gift") {
+            html += `<div class="small-text">届け先：Table ${item.targetTable}（Table ${item.fromTable} からの奢り）</div>`;
+          } else if (item.orderType === "staff_support") {
+            html += `<div class="small-text">区分：スタッフ応援</div>`;
+            if (item.supportMessage) html += `<div class="small-text">メッセージ：${item.supportMessage}</div>`;
+          } else {
+            html += `<div class="small-text">届け先：Table ${item.targetTable}</div>`;
+          }
+
+          html += `<div class="small-text">小計：¥${item.subtotal.toLocaleString()}</div></div>`;
         });
 
         cartItems.innerHTML = html;
@@ -687,6 +692,44 @@
       document.getElementById("cartModalBg").style.display = "none";
     }
 
+    function openConfirmOrder() {
+      if (cart.length === 0) {
+        alert("カートが空です");
+        return;
+      }
+
+      let html = "";
+      let total = 0;
+
+      cart.forEach(item => {
+        total += item.subtotal;
+        html += `<div class="confirm-item"><strong>${item.name}</strong>`;
+        if (item.mix) html += `<div class="small-text">割り方：${item.mix}</div>`;
+        html += `<div class="small-text">数量：${item.quantity}</div>`;
+
+        if (item.orderType === "gift") {
+          html += `<div class="small-text">届け先：Table ${item.targetTable}（Table ${item.fromTable} からの奢り）</div>`;
+        } else if (item.orderType === "staff_support") {
+          html += `<div class="small-text">区分：スタッフ応援</div>`;
+          if (item.supportMessage) html += `<div class="small-text">メッセージ：${item.supportMessage}</div>`;
+        } else {
+          html += `<div class="small-text">届け先：Table ${item.targetTable}</div>`;
+        }
+
+        html += `<div class="small-text">小計：¥${item.subtotal.toLocaleString()}</div></div>`;
+      });
+
+      document.getElementById("confirmItems").innerHTML = html;
+      document.getElementById("confirmTotal").textContent = "合計：¥" + total.toLocaleString();
+
+      closeCart();
+      document.getElementById("confirmModalBg").style.display = "flex";
+    }
+
+    function closeConfirmModal() {
+      document.getElementById("confirmModalBg").style.display = "none";
+    }
+
     function placeOrder() {
       if (cart.length === 0) {
         alert("カートが空です");
@@ -695,7 +738,8 @@
 
       const orderedAt = new Date().toLocaleString("ja-JP");
       history.unshift({
-        orderedAt: orderedAt,
+        orderedAt,
+        orderTable: tableNumber,
         items: [...cart]
       });
 
@@ -703,7 +747,7 @@
       cart = [];
       localStorage.setItem("mocaCart", JSON.stringify(cart));
 
-      closeCart();
+      closeConfirmModal();
       alert("注文が完了しました");
     }
 
@@ -715,22 +759,25 @@
       } else {
         let html = "";
         history.forEach(order => {
-          html += `
-            <div class="history-item">
-              <strong>${order.orderedAt}</strong>
-          `;
-
+          html += `<div class="history-item"><strong>${order.orderedAt}</strong>`;
           order.items.forEach(item => {
-            html += `
-              <div class="small-text">
-                ${item.name} / ${item.mix || "なし"} / ${item.quantity}杯 / ¥${item.subtotal.toLocaleString()}
-              </div>
-            `;
-          });
+            html += `<div class="small-text">${item.name}`;
+            if (item.mix) html += ` / ${item.mix}`;
+            html += ` / ${item.quantity}点`;
 
+            if (item.orderType === "gift") {
+              html += ` / Table ${item.targetTable}へ奢り`;
+            } else if (item.orderType === "staff_support") {
+              html += ` / スタッフ応援`;
+              if (item.supportMessage) html += ` / ${item.supportMessage}`;
+            } else {
+              html += ` / Table ${item.targetTable}`;
+            }
+
+            html += ` / ¥${item.subtotal.toLocaleString()}</div>`;
+          });
           html += `</div>`;
         });
-
         historyItems.innerHTML = html;
       }
 
@@ -741,6 +788,7 @@
       document.getElementById("historyModalBg").style.display = "none";
     }
 
+    setupGiftTableOptions();
     renderCategories();
     renderMenu();
   </script>
