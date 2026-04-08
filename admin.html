@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOCHA 管理画面</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0d0d0d;
+      color: white;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid #333;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .order {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .order h3 {
+      margin: 0 0 10px;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      margin-right: 10px;
+    }
+
+    .done {
+      background: #00c853;
+      color: white;
+    }
+
+    .delete {
+      background: #ff1744;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>MOCHA 管理画面</header>
+
+<div class="container" id="orders"></div>
+
+<script>
+  // 仮の注文データ（あとでSupabaseに変える）
+  let orders = [
+    { id: 1, item: "Coke Beer", seat: "T1", done: false },
+    { id: 2, item: "Shandy Gaff", seat: "T2", done: false }
+  ];
+
+  function render() {
+    const container = document.getElementById("orders");
+    container.innerHTML = "";
+
+    orders.forEach(order => {
+      const div = document.createElement("div");
+      div.className = "order";
+
+      div.innerHTML = `
+        <h3>${order.item}</h3>
+        <div class="status">席: ${order.seat}</div>
+        <div class="status">${order.done ? "提供済み" : "未提供"}</div>
+        <button class="done" onclick="toggle(${order.id})">
+          ${order.done ? "未提供に戻す" : "提供済みにする"}
+        </button>
+        <button class="delete" onclick="remove(${order.id})">削除</button>
+      `;
+
+      container.appendChild(div);
+    });
+  }
+
+  function toggle(id) {
+    orders = orders.map(o =>
+      o.id === id ? { ...o, done: !o.done } : o
+    );
+    render();
+  }
+
+  function remove(id) {
+    orders = orders.filter(o => o.id !== id);
+    render();
+  }
+
+  render();
+</script>
+
+</body>
+</html>
