@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOCA 管理画面</title>
+  <title>moca</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -12,47 +13,58 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      color: #111;
+      color: #f5f7fb;
+      background:
+        radial-gradient(circle at top, rgba(79, 70, 229, 0.18), transparent 24%),
+        radial-gradient(circle at right top, rgba(236, 72, 153, 0.14), transparent 22%),
+        linear-gradient(180deg, #0a0d16 0%, #0f1320 42%, #111827 100%);
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: #111;
+      background: rgba(10, 13, 22, 0.86);
+      backdrop-filter: blur(12px);
       color: #fff;
-      padding: 16px 14px;
-      border-bottom: 1px solid #222;
+      padding: 10px 14px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     }
 
     header h1 {
       margin: 0;
-      font-size: 24px;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0.6px;
+      text-transform: lowercase;
     }
 
     header p {
-      margin: 6px 0 0;
-      font-size: 13px;
-      color: #ccc;
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: #b9c0d0;
+      line-height: 1.4;
     }
 
     .top-bar {
       position: sticky;
-      top: 69px;
+      top: 54px;
       z-index: 99;
-      background: #fff;
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
+      background: rgba(10, 13, 22, 0.82);
+      backdrop-filter: blur(12px);
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       display: flex;
       gap: 8px;
       overflow-x: auto;
     }
 
-    .top-bar button {
-      border: 1px solid #ccc;
-      background: #fff;
-      color: #111;
+    .top-bar button,
+    .table-filter-bar button {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: #eef2ff;
       border-radius: 999px;
       padding: 10px 14px;
       font-size: 13px;
@@ -61,61 +73,82 @@
       white-space: nowrap;
     }
 
-    .top-bar button.active {
-      background: #111;
+    .top-bar button.active,
+    .table-filter-bar button.active {
+      background: linear-gradient(135deg, #6d28d9, #2563eb);
       color: #fff;
-      border-color: #111;
+      border-color: transparent;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 8px 20px rgba(37,99,235,0.25);
+    }
+
+    .table-filter-bar {
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
     }
 
     .summary {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      padding: 12px;
-      background: #fff;
-      border-bottom: 1px solid #e5e5e5;
+      gap: 8px;
+      padding: 0 12px 10px;
     }
 
     .summary-card {
-      background: #fafafa;
-      border: 1px solid #e5e5e5;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 14px;
-      padding: 12px;
+      padding: 10px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.15);
     }
 
     .summary-card .label {
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 6px;
+      font-size: 11px;
+      color: #a8b0c3;
+      margin-bottom: 4px;
     }
 
     .summary-card .value {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
+      color: #ffffff;
     }
 
     .container {
       padding: 12px;
     }
 
-    .order-group {
-      margin-bottom: 14px;
-    }
-
-    .group-title {
-      font-size: 14px;
+    .section-title {
+      font-size: 18px;
       font-weight: bold;
-      color: #555;
-      margin: 0 0 8px;
+      margin: 0 0 10px;
+      color: #f7f9ff;
     }
 
     .order-card {
-      background: #fff;
-      border: 1px solid #e5e5e5;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
       padding: 14px;
       margin-bottom: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+    }
+
+    .order-card.late {
+      border: 1px solid #ff3b3b;
+      box-shadow: 0 0 16px rgba(255,59,59,0.45), 0 10px 28px rgba(0,0,0,0.18);
+    }
+
+    .table-big {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+      color: #ffffff;
+      text-shadow: 0 0 18px rgba(96,165,250,0.18);
     }
 
     .order-head {
@@ -130,12 +163,14 @@
       margin: 0;
       font-size: 18px;
       line-height: 1.4;
+      color: #ffffff;
     }
 
     .meta {
       font-size: 13px;
-      color: #666;
+      color: #aeb7c8;
       line-height: 1.6;
+      margin-top: 4px;
     }
 
     .badge-row {
@@ -154,15 +189,15 @@
       color: #fff;
     }
 
-    .badge-normal { background: #111; }
-    .badge-gift { background: #8a2be2; }
-    .badge-support { background: #d97706; }
+    .badge-normal { background: #1f2937; }
+    .badge-gift { background: #7c3aed; }
+    .badge-support { background: #db2777; }
     .badge-done { background: #16a34a; }
     .badge-pending { background: #dc2626; }
 
     .detail-box {
-      background: #fafafa;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
       border-radius: 12px;
       padding: 10px;
       margin-top: 10px;
@@ -170,7 +205,7 @@
 
     .detail-line {
       font-size: 13px;
-      color: #444;
+      color: #d2d9e8;
       line-height: 1.7;
     }
 
@@ -185,7 +220,7 @@
       flex: 1;
       min-width: 120px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 11px 12px;
       font-size: 14px;
       font-weight: bold;
@@ -193,40 +228,145 @@
     }
 
     .btn-done {
-      background: #111;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: #fff;
     }
 
     .btn-delete {
-      background: #eee;
-      color: #111;
+      background: rgba(255,255,255,0.10);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
-    .btn-history {
-      background: #fff;
-      color: #111;
-      border: 1px solid #ccc !important;
+    .btn-soldout {
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+      color: #fff;
+    }
+
+    .btn-resume {
+      background: linear-gradient(135deg, #059669, #065f46);
+      color: #fff;
     }
 
     .empty {
-      background: #fff;
-      border: 1px dashed #ccc;
-      color: #666;
+      background: rgba(255,255,255,0.05);
+      border: 1px dashed rgba(255,255,255,0.16);
+      color: #b6bfd1;
       border-radius: 14px;
       padding: 24px;
       text-align: center;
     }
 
-    .history-section {
+    .loading {
+      background: rgba(255,255,255,0.05);
+      border: 1px dashed rgba(255,255,255,0.16);
+      color: #b6bfd1;
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .history-section,
+    .soldout-section {
       margin-top: 20px;
-      padding-top: 8px;
+    }
+
+    details {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.16);
+      backdrop-filter: blur(12px);
+    }
+
+    summary {
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      list-style: none;
+      outline: none;
+      color: #fff;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .summary-row span:last-child {
+      font-size: 14px;
+      color: #aeb7c8;
+      font-weight: normal;
+    }
+
+    .history-body {
+      margin-top: 12px;
+    }
+
+    .notice {
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+      color: #fff;
+      font-size: 13px;
+      display: none;
+      box-shadow: 0 10px 24px rgba(37,99,235,0.22);
+    }
+
+    .soldout-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .soldout-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .soldout-name {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #fff;
+    }
+
+    .soldout-meta {
+      font-size: 12px;
+      color: #aeb7c8;
+      margin-top: 2px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      display: inline-block;
+      margin-right: 6px;
+      box-shadow: 0 0 12px rgba(34,197,94,0.7);
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>MOCA 管理画面</h1>
-    <p>通常注文・奢り・スタッフ応援を一覧で確認できます</p>
+    <h1>moca</h1>
+    <p><span class="pulse-dot"></span>通常注文・奢り・スタッフ応援を一覧で確認できます</p>
   </header>
 
   <div class="top-bar">
@@ -237,6 +377,8 @@
     <button onclick="setFilter('pending', this)">未提供のみ</button>
     <button onclick="setFilter('done', this)">提供済み</button>
   </div>
+
+  <div class="table-filter-bar" id="tableFilterBar"></div>
 
   <div class="summary">
     <div class="summary-card">
@@ -258,53 +400,135 @@
   </div>
 
   <div class="container">
-    <div id="ordersArea"></div>
+    <div id="notice" class="notice"></div>
+
+    <div class="section-title">未対応の注文</div>
+    <div id="ordersArea" class="loading">読み込み中...</div>
 
     <div class="history-section">
-      <h2 style="font-size:18px; margin: 0 0 10px;">注文履歴</h2>
-      <div id="historyArea"></div>
+      <details id="historyDetails">
+        <summary>
+          <div class="summary-row">
+            <span>注文履歴（配膳済み）</span>
+            <span id="historyCountText">0件</span>
+          </div>
+        </summary>
+        <div class="history-body">
+          <div id="historyArea" class="loading">読み込み中...</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="soldout-section">
+      <details id="soldoutDetails">
+        <summary>
+          <div class="summary-row">
+            <span>売り切れ管理</span>
+            <span id="soldoutCountText">0件</span>
+          </div>
+        </summary>
+        <div class="history-body">
+          <div id="soldoutArea" class="loading">読み込み中...</div>
+        </div>
+      </details>
     </div>
   </div>
 
   <script>
+    const SUPABASE_URL = "https://ztmuvqipzlnmtsbbtuyh.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_WI0CrS5TGxfQjmjTFtUHmA_Xa5Ey4j5";
+
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     let currentFilter = "all";
+    let allOrders = [];
+    let initializedRealtime = false;
+    let soldOutMap = {};
+    let pollingTimer = null;
+    let selectedTable = null;
 
-    let orders = JSON.parse(localStorage.getItem("mocaAdminOrders")) || [];
-    let history = JSON.parse(localStorage.getItem("mocaAdminHistory")) || [];
+    const menuItems = [
+      { name: "ハートランド生", category: "BEER" },
+      { name: "ハイネケン", category: "BEER" },
+      { name: "コロナ", category: "BEER" },
+      { name: "ギネス", category: "BEER" },
+      { name: "ジンベース", category: "GIN & VODKA" },
+      { name: "タンカレー / ボンベイ", category: "GIN & VODKA" },
+      { name: "ウォッカベース", category: "GIN & VODKA" },
+      { name: "ハイボール", category: "WHISKY & BOURBON" },
+      { name: "ビアハイボール / 梅酒ハイボール", category: "WHISKY & BOURBON" },
+      { name: "バーボン", category: "WHISKY & BOURBON" },
+      { name: "ジェームソン / バランタイン / グレングラント", category: "WHISKY & BOURBON" },
+      { name: "タリスカー 10年", category: "WHISKY & BOURBON" },
+      { name: "ラフロイグ 10年", category: "WHISKY & BOURBON" },
+      { name: "スタンダード モヒート", category: "MOJITO" },
+      { name: "マリブ モヒート", category: "MOJITO" },
+      { name: "イタリアン モヒート", category: "MOJITO" },
+      { name: "パッシモ モヒート", category: "MOJITO" },
+      { name: "マンゴヤン モヒート", category: "MOJITO" },
+      { name: "ミドリ モヒート", category: "MOJITO" },
+      { name: "ルジェカシス モヒート", category: "MOJITO" },
+      { name: "ティフィン モヒート", category: "MOJITO" },
+      { name: "パイナップル モヒート", category: "MOJITO" },
+      { name: "シャルトリューズ モヒート", category: "MOJITO" },
+      { name: "テキーラ ショット・ロック", category: "COCKTAILS" },
+      { name: "テキーラ サンライズ", category: "COCKTAILS" },
+      { name: "カンパリ オレンジ", category: "COCKTAILS" },
+      { name: "カンパリ ソーダ", category: "COCKTAILS" },
+      { name: "スプモーニ", category: "COCKTAILS" },
+      { name: "カシス オレンジ", category: "COCKTAILS" },
+      { name: "カシス グレープ", category: "COCKTAILS" },
+      { name: "カシス ソーダ", category: "COCKTAILS" },
+      { name: "レゲエパンチ", category: "COCKTAILS" },
+      { name: "ファジーネーブル", category: "COCKTAILS" },
+      { name: "ラムコーク", category: "COCKTAILS" },
+      { name: "マリブミルク", category: "COCKTAILS" },
+      { name: "チャイナブルー", category: "COCKTAILS" },
+      { name: "スノーボール", category: "COCKTAILS" },
+      { name: "カルーアミルク", category: "COCKTAILS" },
+      { name: "梅酒ビア", category: "OTHERS & WINE" },
+      { name: "梅エール", category: "OTHERS & WINE" },
+      { name: "パトロンコーヒー", category: "OTHERS & WINE" },
+      { name: "パトロンミルク", category: "OTHERS & WINE" },
+      { name: "ワイン グラス", category: "OTHERS & WINE" },
+      { name: "ワイン ボトル", category: "OTHERS & WINE" },
+      { name: "サラトガクーラー", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "シャーリーテンプル", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "ヴァージンモヒート", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "100%ジュース", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "お茶", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "コーラ", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "水", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "コーラフロート", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "コーヒーフロート", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "ノンアルコールビール", category: "NON ALCOHOL & SOFT DRINK" },
+      { name: "スタッフ応援ドリンク ￥300", category: "STAFF SUPPORT" },
+      { name: "スタッフ応援ドリンク ￥500", category: "STAFF SUPPORT" },
+      { name: "スタッフ応援ドリンク ￥1,000", category: "STAFF SUPPORT" }
+    ];
 
-    function migrateFromCustomerHistory() {
-      const customerHistory = JSON.parse(localStorage.getItem("mocaHistory")) || [];
+    function renderTableFilters() {
+      const allTables = [...new Set(allOrders.map(o => String(o.from_table || "")).filter(Boolean))].sort((a, b) => Number(a) - Number(b));
+      const bar = document.getElementById("tableFilterBar");
 
-      if (orders.length === 0 && history.length === 0 && customerHistory.length > 0) {
-        customerHistory.forEach(orderGroup => {
-          orderGroup.items.forEach(item => {
-            orders.push({
-              id: Date.now().toString() + Math.random().toString(16).slice(2),
-              orderedAt: orderGroup.orderedAt,
-              orderTable: orderGroup.orderTable || item.fromTable || "-",
-              name: item.name,
-              mix: item.mix || "",
-              quantity: item.quantity || 1,
-              subtotal: item.subtotal || 0,
-              targetTable: item.targetTable || item.fromTable || "-",
-              fromTable: item.fromTable || orderGroup.orderTable || "-",
-              orderType: item.orderType || "normal",
-              supportMessage: item.supportMessage || "",
-              done: false
-            });
-          });
-        });
-
-        saveOrders();
-      }
+      let html = `<button class="${selectedTable === null ? 'active' : ''}" onclick="filterTable(null)">全テーブル</button>`;
+      allTables.forEach(t => {
+        html += `<button class="${selectedTable === t ? 'active' : ''}" onclick="filterTable('${escapeJs(t)}')">T${escapeHtml(t)}</button>`;
+      });
+      bar.innerHTML = html;
     }
 
-    function saveOrders() {
-      localStorage.setItem("mocaAdminOrders", JSON.stringify(orders));
+    function filterTable(num) {
+      selectedTable = num;
+      renderTableFilters();
+      render();
     }
 
-    function saveHistory() {
-      localStorage.setItem("mocaAdminHistory", JSON.stringify(history));
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll(".top-bar button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      render();
     }
 
     function typeLabel(type) {
@@ -319,25 +543,38 @@
       return "badge-normal";
     }
 
-    function setFilter(filter, btn) {
-      currentFilter = filter;
-      document.querySelectorAll(".top-bar button").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      render();
+    function isLate(orderTime) {
+      const now = new Date();
+      const orderDate = new Date(orderTime);
+      return (now - orderDate) / 1000 > 480;
     }
 
     function getFilteredOrders() {
-      if (currentFilter === "all") return orders;
-      if (currentFilter === "pending") return orders.filter(order => !order.done);
-      if (currentFilter === "done") return orders.filter(order => order.done);
-      return orders.filter(order => order.orderType === currentFilter);
+      let list = [...allOrders];
+
+      if (selectedTable !== null) {
+        list = list.filter(o => String(o.from_table) === String(selectedTable));
+      }
+
+      if (currentFilter === "all") return list.filter(order => order.status !== "done");
+      if (currentFilter === "pending") return list.filter(order => order.status === "pending");
+      if (currentFilter === "done") return list.filter(order => order.status === "done");
+      return list.filter(order => order.order_type === currentFilter && order.status !== "done");
     }
 
     function renderSummary() {
-      document.getElementById("pendingCount").textContent = orders.filter(o => !o.done).length;
-      document.getElementById("doneCount").textContent = orders.filter(o => o.done).length;
-      document.getElementById("giftCount").textContent = orders.filter(o => o.orderType === "gift").length;
-      document.getElementById("supportCount").textContent = orders.filter(o => o.orderType === "staff_support").length;
+      const pending = allOrders.filter(o => o.status !== "done").length;
+      const done = allOrders.filter(o => o.status === "done").length;
+      const gift = allOrders.filter(o => o.order_type === "gift").length;
+      const support = allOrders.filter(o => o.order_type === "staff_support").length;
+      const soldout = Object.values(soldOutMap).filter(Boolean).length;
+
+      document.getElementById("pendingCount").textContent = pending;
+      document.getElementById("doneCount").textContent = done;
+      document.getElementById("giftCount").textContent = gift;
+      document.getElementById("supportCount").textContent = support;
+      document.getElementById("historyCountText").textContent = `${done}件`;
+      document.getElementById("soldoutCountText").textContent = `${soldout}件`;
     }
 
     function renderOrders() {
@@ -352,38 +589,44 @@
       let html = "";
 
       filtered.forEach(order => {
+        const targetLabel =
+          order.order_type === "gift"
+            ? `Table ${escapeHtml(order.target_table || "-")}（Table ${escapeHtml(order.from_table || "-")} からの奢り）`
+            : order.order_type === "staff_support"
+              ? "スタッフ応援"
+              : `Table ${escapeHtml(order.target_table || "-")}`;
+
         html += `
-          <div class="order-card">
+          <div class="order-card ${isLate(order.created_at) && order.status !== 'done' ? 'late' : ''}">
+            <div class="table-big">Table ${escapeHtml(order.from_table || "-")}</div>
+
             <div class="order-head">
               <div>
-                <h3>${order.name}</h3>
+                <h3>${escapeHtml(order.item_name)}</h3>
                 <div class="meta">
-                  注文時刻: ${order.orderedAt}<br>
-                  注文元: Table ${order.fromTable}
+                  注文時間: ${formatDate(order.created_at)}
                 </div>
               </div>
               <div style="text-align:right;">
-                <div style="font-size:18px; font-weight:bold;">¥${Number(order.subtotal).toLocaleString()}</div>
+                <div style="font-size:18px; font-weight:bold;">¥${Number(order.subtotal || 0).toLocaleString()}</div>
               </div>
             </div>
 
             <div class="badge-row">
-              <span class="badge ${typeBadgeClass(order.orderType)}">${typeLabel(order.orderType)}</span>
-              <span class="badge ${order.done ? 'badge-done' : 'badge-pending'}">${order.done ? '提供済み' : '未提供'}</span>
+              <span class="badge ${typeBadgeClass(order.order_type)}">${typeLabel(order.order_type)}</span>
+              <span class="badge ${order.status === "done" ? "badge-done" : "badge-pending"}">${order.status === "done" ? "提供済み" : "未提供"}</span>
             </div>
 
             <div class="detail-box">
               <div class="detail-line">数量: ${order.quantity}</div>
-              ${order.mix ? `<div class="detail-line">割り方: ${order.mix}</div>` : ""}
-              ${order.orderType === "normal" ? `<div class="detail-line">届け先: Table ${order.targetTable}</div>` : ""}
-              ${order.orderType === "gift" ? `<div class="detail-line">届け先: Table ${order.targetTable}（Table ${order.fromTable} からの奢り）</div>` : ""}
-              ${order.orderType === "staff_support" ? `<div class="detail-line">区分: スタッフ応援</div>` : ""}
-              ${order.orderType === "staff_support" && order.supportMessage ? `<div class="detail-line">メッセージ: ${escapeHtml(order.supportMessage)}</div>` : ""}
+              ${order.mix ? `<div class="detail-line">割り方: ${escapeHtml(order.mix)}</div>` : ""}
+              <div class="detail-line">届け先: ${targetLabel}</div>
+              ${order.order_type === "staff_support" && order.support_message ? `<div class="detail-line">メッセージ: ${escapeHtml(order.support_message)}</div>` : ""}
             </div>
 
             <div class="actions">
-              <button class="btn-done" onclick="toggleDone('${order.id}')">
-                ${order.done ? "未提供に戻す" : "提供済みにする"}
+              <button class="btn-done" onclick="toggleDone('${order.id}', '${order.status}')">
+                ${order.status === "done" ? "未提供に戻す" : "提供済みにする"}
               </button>
               <button class="btn-delete" onclick="deleteOrder('${order.id}')">削除</button>
             </div>
@@ -396,41 +639,52 @@
 
     function renderHistory() {
       const historyArea = document.getElementById("historyArea");
+      let doneOrders = allOrders.filter(order => order.status === "done");
 
-      if (history.length === 0) {
+      if (selectedTable !== null) {
+        doneOrders = doneOrders.filter(o => String(o.from_table) === String(selectedTable));
+      }
+
+      if (doneOrders.length === 0) {
         historyArea.innerHTML = `<div class="empty">履歴はまだありません</div>`;
         return;
       }
 
       let html = "";
-      history.forEach(order => {
+      doneOrders.forEach(order => {
+        const targetLabel =
+          order.order_type === "gift"
+            ? `Table ${escapeHtml(order.target_table || "-")}（Table ${escapeHtml(order.from_table || "-")} からの奢り）`
+            : order.order_type === "staff_support"
+              ? "スタッフ応援"
+              : `Table ${escapeHtml(order.target_table || "-")}`;
+
         html += `
           <div class="order-card">
+            <div class="table-big">Table ${escapeHtml(order.from_table || "-")}</div>
+
             <div class="order-head">
               <div>
-                <h3>${order.name}</h3>
+                <h3>${escapeHtml(order.item_name)}</h3>
                 <div class="meta">
-                  注文時刻: ${order.orderedAt}<br>
-                  注文元: Table ${order.fromTable}
+                  注文時間: ${formatDate(order.created_at)}
                 </div>
               </div>
               <div style="text-align:right;">
-                <div style="font-size:18px; font-weight:bold;">¥${Number(order.subtotal).toLocaleString()}</div>
+                <div style="font-size:18px; font-weight:bold;">¥${Number(order.subtotal || 0).toLocaleString()}</div>
               </div>
             </div>
 
             <div class="badge-row">
-              <span class="badge ${typeBadgeClass(order.orderType)}">${typeLabel(order.orderType)}</span>
+              <span class="badge ${typeBadgeClass(order.order_type)}">${typeLabel(order.order_type)}</span>
               <span class="badge badge-done">提供済み履歴</span>
             </div>
 
             <div class="detail-box">
               <div class="detail-line">数量: ${order.quantity}</div>
-              ${order.mix ? `<div class="detail-line">割り方: ${order.mix}</div>` : ""}
-              ${order.orderType === "normal" ? `<div class="detail-line">届け先: Table ${order.targetTable}</div>` : ""}
-              ${order.orderType === "gift" ? `<div class="detail-line">届け先: Table ${order.targetTable}（Table ${order.fromTable} からの奢り）</div>` : ""}
-              ${order.orderType === "staff_support" ? `<div class="detail-line">区分: スタッフ応援</div>` : ""}
-              ${order.orderType === "staff_support" && order.supportMessage ? `<div class="detail-line">メッセージ: ${escapeHtml(order.supportMessage)}</div>` : ""}
+              ${order.mix ? `<div class="detail-line">割り方: ${escapeHtml(order.mix)}</div>` : ""}
+              <div class="detail-line">届け先: ${targetLabel}</div>
+              ${order.order_type === "staff_support" && order.support_message ? `<div class="detail-line">メッセージ: ${escapeHtml(order.support_message)}</div>` : ""}
             </div>
           </div>
         `;
@@ -439,38 +693,129 @@
       historyArea.innerHTML = html;
     }
 
-    function toggleDone(id) {
-      const target = orders.find(order => order.id === id);
-      if (!target) return;
+    function renderSoldOutPanel() {
+      const soldoutArea = document.getElementById("soldoutArea");
 
-      target.done = !target.done;
-
-      if (target.done) {
-        history.unshift({ ...target });
-      } else {
-        history = history.filter(h => h.id !== id);
+      if (!menuItems.length) {
+        soldoutArea.innerHTML = `<div class="empty">商品がありません</div>`;
+        return;
       }
 
-      saveOrders();
-      saveHistory();
+      let html = `<div class="soldout-list">`;
+      menuItems.forEach(item => {
+        const soldOut = !!soldOutMap[item.name];
+        html += `
+          <div class="soldout-item">
+            <div>
+              <div class="soldout-name">${escapeHtml(item.name)}</div>
+              <div class="soldout-meta">${escapeHtml(item.category)}</div>
+            </div>
+            <button class="${soldOut ? 'btn-resume' : 'btn-soldout'}" onclick="toggleSoldOut('${escapeJs(item.name)}', ${soldOut})">
+              ${soldOut ? "販売再開" : "売り切れ"}
+            </button>
+          </div>
+        `;
+      });
+      html += `</div>`;
+
+      soldoutArea.innerHTML = html;
+    }
+
+    async function fetchMenuFlags() {
+      const { data, error } = await supabaseClient
+        .from("menu_flags")
+        .select("*");
+
+      if (error) {
+        console.error(error);
+        document.getElementById("soldoutArea").innerHTML = `<div class="empty">売り切れ情報の取得に失敗しました</div>`;
+        return;
+      }
+
+      soldOutMap = {};
+      (data || []).forEach(row => {
+        soldOutMap[row.item_name] = !!row.sold_out;
+      });
+
+      renderSoldOutPanel();
+      renderSummary();
+    }
+
+    async function toggleSoldOut(itemName, current) {
+      const { error } = await supabaseClient
+        .from("menu_flags")
+        .upsert({
+          item_name: itemName,
+          sold_out: !current,
+          updated_at: new Date().toISOString()
+        });
+
+      if (error) {
+        console.error(error);
+        alert("売り切れ更新に失敗しました");
+        return;
+      }
+
+      showNotice(!current ? `${itemName} を売り切れにしました` : `${itemName} の販売を再開しました`);
+      await fetchMenuFlags();
+    }
+
+    async function fetchOrders(showLoading = false) {
+      if (showLoading) {
+        document.getElementById("ordersArea").innerHTML = `<div class="loading">読み込み中...</div>`;
+        document.getElementById("historyArea").innerHTML = `<div class="loading">読み込み中...</div>`;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error(error);
+        document.getElementById("ordersArea").innerHTML = `<div class="empty">注文の取得に失敗しました</div>`;
+        document.getElementById("historyArea").innerHTML = `<div class="empty">履歴の取得に失敗しました</div>`;
+        return;
+      }
+
+      allOrders = data || [];
+      renderTableFilters();
       render();
     }
 
-    function deleteOrder(id) {
-      orders = orders.filter(order => order.id !== id);
-      history = history.filter(order => order.id !== id);
-      saveOrders();
-      saveHistory();
-      render();
+    async function toggleDone(id, currentStatus) {
+      const newStatus = currentStatus === "done" ? "pending" : "done";
+
+      const { error } = await supabaseClient
+        .from("orders")
+        .update({ status: newStatus })
+        .eq("id", id);
+
+      if (error) {
+        console.error(error);
+        alert("状態更新に失敗しました");
+        return;
+      }
+
+      await fetchOrders();
     }
 
-    function escapeHtml(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    async function deleteOrder(id) {
+      const ok = confirm("この注文を削除しますか？");
+      if (!ok) return;
+
+      const { error } = await supabaseClient
+        .from("orders")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        console.error(error);
+        alert("削除に失敗しました");
+        return;
+      }
+
+      await fetchOrders();
     }
 
     function render() {
@@ -479,8 +824,116 @@
       renderHistory();
     }
 
-    migrateFromCustomerHistory();
-    render();
+    function formatDate(value) {
+      try {
+        return new Date(value).toLocaleString("ja-JP");
+      } catch {
+        return value;
+      }
+    }
+
+    function escapeHtml(text) {
+      return String(text ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeJs(text) {
+      return String(text ?? "").replaceAll("\\", "\\\\").replaceAll("'", "\\'");
+    }
+
+    function showNotice(text) {
+      const notice = document.getElementById("notice");
+      notice.textContent = text;
+      notice.style.display = "block";
+      clearTimeout(showNotice.timer);
+      showNotice.timer = setTimeout(() => {
+        notice.style.display = "none";
+      }, 2500);
+    }
+
+    function playNewOrderSound() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        const ctx = new AudioContextClass();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.frequency.setValueAtTime(660, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function subscribeRealtime() {
+      if (initializedRealtime) return;
+      initializedRealtime = true;
+
+      supabaseClient
+        .channel("orders-realtime")
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "orders" },
+          async () => {
+            playNewOrderSound();
+            showNotice("新しい注文が入りました");
+            await fetchOrders();
+          }
+        )
+        .on(
+          "postgres_changes",
+          { event: "UPDATE", schema: "public", table: "orders" },
+          async () => {
+            await fetchOrders();
+          }
+        )
+        .on(
+          "postgres_changes",
+          { event: "DELETE", schema: "public", table: "orders" },
+          async () => {
+            await fetchOrders();
+          }
+        )
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "menu_flags" },
+          async () => {
+            await fetchMenuFlags();
+          }
+        )
+        .subscribe((status) => {
+          console.log("Realtime status:", status);
+        });
+    }
+
+    function startPollingFallback() {
+      if (pollingTimer) clearInterval(pollingTimer);
+      pollingTimer = setInterval(async () => {
+        await fetchOrders();
+        await fetchMenuFlags();
+      }, 5000);
+    }
+
+    fetchOrders(true);
+    fetchMenuFlags();
+    subscribeRealtime();
+    startPollingFallback();
   </script>
 </body>
 </html>
