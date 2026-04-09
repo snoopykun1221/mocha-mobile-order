@@ -3,107 +3,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOCA Mobile Order</title>
+  <title>moca order</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #fff;
       color: #111;
+      background:
+        radial-gradient(circle at top, rgba(99,102,241,0.12), transparent 24%),
+        radial-gradient(circle at right top, rgba(236,72,153,0.10), transparent 22%),
+        linear-gradient(180deg, #efefef 0%, #e9e9e9 45%, #e2e2e2 100%);
     }
+
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: #fff;
-      border-bottom: 1px solid #ddd;
-      padding: 14px 12px 10px;
+      background: rgba(250,250,250,0.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 10px 14px 8px;
       text-align: center;
     }
+
     header h1 {
       margin: 0;
-      font-size: 28px;
-      letter-spacing: 1px;
+      font-size: 20px;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      color: #1d1d1d;
+      text-transform: lowercase;
     }
-    header p {
-      margin: 6px 0 0;
-      color: #666;
-      font-size: 14px;
-    }
+
     .table-banner {
-      margin-top: 10px;
+      margin-top: 8px;
       display: inline-block;
-      padding: 8px 14px;
+      padding: 6px 12px;
       border-radius: 999px;
-      background: #111;
+      background: #1e1e1e;
       color: #fff;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
+      letter-spacing: 0.4px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
+
     .top-buttons {
       display: flex;
       gap: 10px;
-      padding: 12px;
-      background: #fff;
-      border-bottom: 1px solid #eee;
+      padding: 10px 12px;
+      background: rgba(250,250,250,0.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
       position: sticky;
-      top: 98px;
+      top: 55px;
       z-index: 99;
     }
+
     .top-buttons button {
       flex: 1;
-      padding: 12px;
+      padding: 11px;
       border: none;
-      border-radius: 10px;
-      background: #111;
+      border-radius: 12px;
+      background: #202020;
       color: #fff;
-      font-size: 15px;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
     }
+
     .category-bar {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       overflow-x: auto;
-      padding: 12px;
-      background: #fff;
-      border-bottom: 1px solid #eee;
+      padding: 10px 12px;
+      background: rgba(250,250,250,0.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
       position: sticky;
-      top: 160px;
+      top: 107px;
       z-index: 98;
     }
+
     .category-bar button {
       white-space: nowrap;
-      border: 1px solid #ccc;
-      background: #fff;
-      color: #111;
+      border: 1px solid rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.88);
+      color: #222;
       border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 13px;
+      padding: 9px 13px;
+      font-size: 12px;
       cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
+
     .category-bar button.active {
-      background: #111;
+      background: #202020;
       color: #fff;
-      border-color: #111;
+      border-color: #202020;
     }
-    .container { padding: 14px; }
+
+    .container {
+      padding: 14px;
+    }
+
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
     }
+
     .card {
       position: relative;
-      border: 1px solid #e5e5e5;
-      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
       padding: 12px;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      background: rgba(255,255,255,0.80);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
       cursor: pointer;
       overflow: hidden;
     }
+
     .card img {
       width: 100%;
       height: 130px;
@@ -111,39 +136,55 @@
       border-radius: 12px;
       background: #f4f4f4;
     }
+
     .card h3 {
-      font-size: 17px;
+      font-size: 14px;
       margin: 12px 0 6px;
-      line-height: 1.3;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.1px;
     }
+
     .desc {
-      font-size: 12px;
+      font-size: 11px;
       color: #666;
-      min-height: 34px;
-      line-height: 1.4;
+      min-height: 32px;
+      line-height: 1.35;
       margin-bottom: 8px;
     }
+
     .price {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       margin-bottom: 10px;
+      color: #1a1a1a;
     }
+
     .card button {
       width: 100%;
       padding: 10px;
-      background: #111;
+      background: #202020;
       color: #fff;
       border: none;
       border-radius: 10px;
-      font-size: 14px;
-      font-weight: bold;
+      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
     }
-    .soldout-card { opacity: 0.55; }
+
+    .soldout-card {
+      opacity: 0.35;
+      filter: grayscale(100%);
+      pointer-events: none;
+    }
+
     .soldout-card button {
-      background: #999;
+      background: #8f8f8f;
       cursor: not-allowed;
     }
+
     .badge-wrap {
       position: absolute;
       top: 18px;
@@ -153,148 +194,221 @@
       flex-wrap: wrap;
       z-index: 2;
     }
+
     .badge {
       display: inline-block;
       padding: 5px 9px;
       border-radius: 999px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: bold;
       color: #fff;
+      backdrop-filter: blur(8px);
     }
-    .badge-recommend { background: #111; }
-    .badge-popular { background: #c40000; }
-    .badge-limited { background: #a05a00; }
-    .badge-soldout { background: #666; }
+
+    .badge-recommend { background: rgba(26,26,26,0.92); }
+    .badge-popular { background: rgba(163, 28, 28, 0.92); }
+    .badge-top1 { background: linear-gradient(135deg, rgba(245,158,11,0.96), rgba(239,68,68,0.96)); }
+    .badge-limited { background: rgba(132, 88, 24, 0.92); }
+    .badge-soldout { background: rgba(100,100,100,0.92); }
+    .badge-selfonly { background: rgba(52, 88, 138, 0.92); }
 
     .empty-food, .support-box {
       padding: 20px;
-      border: 1px solid #e5e5e5;
-      border-radius: 14px;
-      background: #fafafa;
-      line-height: 1.6;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(8px);
+      line-height: 1.7;
       color: #444;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .support-box {
+      border: 1px solid #8b5cf6;
+      box-shadow: 0 0 18px rgba(139,92,246,0.18), 0 8px 24px rgba(0,0,0,0.05);
+      background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(59,130,246,0.05));
+    }
+
+    .support-stats {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      font-size: 13px;
+      color: #333;
+      line-height: 1.8;
     }
 
     .modal-bg {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.58);
       z-index: 300;
       align-items: center;
       justify-content: center;
       padding: 18px;
     }
+
     .modal {
       width: 100%;
-      max-width: 430px;
-      max-height: 88vh;
+      max-width: 420px;
+      max-height: 70vh;
+      margin: auto;
+      padding: 16px;
       overflow-y: auto;
-      background: #fff;
+      background: rgba(255,255,255,0.96);
       color: #111;
-      border-radius: 18px;
-      padding: 18px;
+      border-radius: 20px;
+      box-shadow: 0 18px 42px rgba(0,0,0,0.18);
+      backdrop-filter: blur(12px);
     }
+
+    #historyModalBg .modal {
+      max-height: 65vh;
+    }
+
     .modal h2 {
       margin: 0 0 8px;
       font-size: 22px;
     }
+
     .modal p {
       color: #555;
       line-height: 1.5;
       margin-top: 0;
     }
-    .option-group { margin: 16px 0; }
+
+    .option-group {
+      margin: 16px 0;
+    }
+
     .option-title {
       font-weight: bold;
       margin-bottom: 8px;
       display: block;
     }
+
     .option-group label {
       display: block;
       margin: 8px 0;
       font-size: 15px;
     }
+
     .qty-row {
       display: flex;
       align-items: center;
       gap: 10px;
       margin: 16px 0;
     }
+
     .qty-row button {
       width: 38px;
       height: 38px;
-      border: 1px solid #ccc;
+      border: 1px solid rgba(0,0,0,0.14);
       background: #fff;
       color: #111;
       border-radius: 10px;
       font-size: 18px;
       cursor: pointer;
     }
+
     .qty-number {
       min-width: 30px;
       text-align: center;
       font-size: 18px;
       font-weight: bold;
     }
+
     .modal-actions {
       display: flex;
       gap: 10px;
       margin-top: 18px;
     }
+
     .modal-actions button {
       flex: 1;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
       border: none;
     }
+
     .btn-main {
-      background: #111;
+      background: #202020;
       color: #fff;
     }
+
     .btn-sub {
-      background: #eee;
+      background: #ececec;
       color: #111;
     }
+
     .cart-item, .history-item, .confirm-item {
       border-bottom: 1px solid #eee;
       padding: 10px 0;
     }
+
     .cart-item:last-child, .history-item:last-child, .confirm-item:last-child {
       border-bottom: none;
     }
+
     .small-text {
       color: #666;
       font-size: 13px;
       margin-top: 4px;
       line-height: 1.5;
     }
+
     .total-box {
       margin: 16px 0;
       font-size: 18px;
       font-weight: bold;
     }
+
     select, textarea {
       width: 100%;
       padding: 11px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.14);
+      border-radius: 12px;
       background: #fff;
       font-size: 15px;
     }
+
     textarea {
       min-height: 90px;
       resize: vertical;
+    }
+
+    .loading-box {
+      padding: 14px;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      color: #555;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      z-index: 999;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>MOCA ORDER</h1>
-    <p>モバイルオーダー</p>
+    <h1>moca order</h1>
     <div class="table-banner" id="tableBanner">Table 1</div>
   </header>
 
@@ -386,6 +500,11 @@
   </div>
 
   <script>
+    const SUPABASE_URL = "https://ztmuvqipzlnmtsbbtuyh.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_WI0CrS5TGxfQjmjTFtUHmA_Xa5Ey4j5";
+
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const tableNumber = new URLSearchParams(window.location.search).get("table") || "1";
     document.getElementById("tableBanner").textContent = "Table " + tableNumber;
 
@@ -404,76 +523,202 @@
     ];
 
     const items = [
-      { category: "BEER", name: "ハートランド生", price: 800, desc: "柔らかな甘さと穏やかな苦味", recommend: true },
-      { category: "BEER", name: "ハイネケン", price: 800, desc: "フルーティーでさっぱり" },
-      { category: "BEER", name: "コロナ", price: 800, desc: "すっきり爽快リゾートスタイル", popular: true },
-      { category: "BEER", name: "ギネス", price: 800, desc: "濃い琥珀色とクリーミーな泡", limited: true },
+      { category: "BEER", name: "ハートランド生", price: 800, desc: "柔らかな甘さと穏やかな苦味", recommend: true, image: "https://images.unsplash.com/photo-1563379091339-03246963d29c" },
+      { category: "BEER", name: "ハイネケン", price: 800, desc: "フルーティーでさっぱり", image: "https://images.unsplash.com/photo-1608270586620-248524c67de9" },
+      { category: "BEER", name: "コロナ", price: 800, desc: "すっきり爽快リゾートスタイル", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
+      { category: "BEER", name: "ギネス", price: 800, desc: "濃い琥珀色とクリーミーな泡", limited: true, image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699" },
 
-      { category: "GIN & VODKA", name: "ジンベース", price: 800, desc: "リッキー、バック、トニック、ライム", recommend: true },
-      { category: "GIN & VODKA", name: "タンカレー / ボンベイ", price: 800, desc: "オン・ザ・ロック" },
-      { category: "GIN & VODKA", name: "ウォッカベース", price: 800, desc: "ブルドック、ソルティドッグ、モスコミュール、スクリュードライバー", popular: true },
+      { category: "GIN & VODKA", name: "ジンベース", price: 800, desc: "リッキー、バック、トニック、ライム", recommend: true, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
+      { category: "GIN & VODKA", name: "タンカレー / ボンベイ", price: 800, desc: "オン・ザ・ロック", image: "https://images.unsplash.com/photo-1587223962930-cb7f31384c19" },
+      { category: "GIN & VODKA", name: "ウォッカベース", price: 800, desc: "ブルドック、ソルティドッグ、モスコミュール、スクリュードライバー", image: "https://images.unsplash.com/photo-1544145945-f90425340c7e" },
 
-      { category: "WHISKY & BOURBON", name: "ハイボール", price: 700, desc: "定番のハイボール", popular: true },
-      { category: "WHISKY & BOURBON", name: "ビアハイボール / 梅酒ハイボール", price: 800, desc: "各￥800" },
-      { category: "WHISKY & BOURBON", name: "バーボン", price: 700, desc: "アーリータイムス、ジャックダニエル、セブンクラウン等" },
-      { category: "WHISKY & BOURBON", name: "ジェームソン / バランタイン / グレングラント", price: 700, desc: "スコッチ・アイリッシュ" },
-      { category: "WHISKY & BOURBON", name: "タリスカー 10年", price: 1200, desc: "香り高い本格派", limited: true },
-      { category: "WHISKY & BOURBON", name: "ラフロイグ 10年", price: 1400, desc: "個性の強いスモーキー感", soldOut: true },
+      { category: "WHISKY & BOURBON", name: "ハイボール", price: 700, desc: "定番のハイボール", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
+      { category: "WHISKY & BOURBON", name: "ビアハイボール / 梅酒ハイボール", price: 800, desc: "各￥800", image: "https://images.unsplash.com/photo-1470337458703-46ad1756a187" },
+      { category: "WHISKY & BOURBON", name: "バーボン", price: 700, desc: "アーリータイムス、ジャックダニエル、セブンクラウン等", image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8" },
+      { category: "WHISKY & BOURBON", name: "ジェームソン / バランタイン / グレングラント", price: 700, desc: "スコッチ・アイリッシュ", image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b" },
+      { category: "WHISKY & BOURBON", name: "タリスカー 10年", price: 1200, desc: "香り高い本格派", limited: true, image: "https://images.unsplash.com/photo-1613206485381-b028e578e5b9" },
+      { category: "WHISKY & BOURBON", name: "ラフロイグ 10年", price: 1400, desc: "個性の強いスモーキー感", soldOut: true, image: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b" },
 
-      { category: "MOJITO", name: "スタンダード モヒート", price: 950, desc: "定番の爽やかなモヒート", recommend: true },
-      { category: "MOJITO", name: "マリブ モヒート", price: 950, desc: "トロピカルな香り" },
-      { category: "MOJITO", name: "イタリアン モヒート", price: 950, desc: "すっきりした飲み口" },
-      { category: "MOJITO", name: "パッシモ モヒート", price: 950, desc: "フルーティー" },
-      { category: "MOJITO", name: "マンゴヤン モヒート", price: 950, desc: "マンゴーの甘み" },
-      { category: "MOJITO", name: "ミドリ モヒート", price: 950, desc: "メロンリキュール使用" },
-      { category: "MOJITO", name: "ルジェカシス モヒート", price: 950, desc: "カシス香る一杯" },
-      { category: "MOJITO", name: "ティフィン モヒート", price: 950, desc: "紅茶系の香り" },
-      { category: "MOJITO", name: "パイナップル モヒート", price: 950, desc: "南国感たっぷり" },
-      { category: "MOJITO", name: "シャルトリューズ モヒート", price: 1000, desc: "爽やかで贅沢な一杯", limited: true },
+      { category: "MOJITO", name: "スタンダード モヒート", price: 950, desc: "定番の爽やかなモヒート", recommend: true, image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "マリブ モヒート", price: 950, desc: "トロピカルな香り", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "イタリアン モヒート", price: 950, desc: "すっきりした飲み口", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "パッシモ モヒート", price: 950, desc: "フルーティー", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "マンゴヤン モヒート", price: 950, desc: "マンゴーの甘み", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "ミドリ モヒート", price: 950, desc: "メロンリキュール使用", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "ルジェカシス モヒート", price: 950, desc: "カシス香る一杯", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "ティフィン モヒート", price: 950, desc: "紅茶系の香り", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "パイナップル モヒート", price: 950, desc: "南国感たっぷり", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
+      { category: "MOJITO", name: "シャルトリューズ モヒート", price: 1000, desc: "爽やかで贅沢な一杯", limited: true, image: "https://images.unsplash.com/photo-1570598912132-0ba1dc952b7d" },
 
-      { category: "COCKTAILS", name: "テキーラ ショット・ロック", price: 530, desc: "ショットまたはロック" },
-      { category: "COCKTAILS", name: "テキーラ サンライズ", price: 800, desc: "フルーティーな定番" },
-      { category: "COCKTAILS", name: "カンパリ オレンジ", price: 700, desc: "甘苦い定番" },
-      { category: "COCKTAILS", name: "カンパリ ソーダ", price: 700, desc: "すっきり飲みやすい" },
-      { category: "COCKTAILS", name: "スプモーニ", price: 800, desc: "カンパリ系の人気カクテル" },
-      { category: "COCKTAILS", name: "カシス オレンジ", price: 700, desc: "定番人気" },
-      { category: "COCKTAILS", name: "カシス グレープ", price: 700, desc: "フルーティー" },
-      { category: "COCKTAILS", name: "カシス ソーダ", price: 700, desc: "軽やかに飲める" },
-      { category: "COCKTAILS", name: "レゲエパンチ", price: 700, desc: "ピーチ系の人気カクテル" },
-      { category: "COCKTAILS", name: "ファジーネーブル", price: 700, desc: "甘くて飲みやすい" },
-      { category: "COCKTAILS", name: "ラムコーク", price: 700, desc: "ラムの定番" },
-      { category: "COCKTAILS", name: "マリブミルク", price: 700, desc: "やさしい甘さ" },
-      { category: "COCKTAILS", name: "チャイナブルー", price: 800, desc: "華やかな香り" },
-      { category: "COCKTAILS", name: "スノーボール", price: 800, desc: "なめらかな口当たり" },
-      { category: "COCKTAILS", name: "カルーアミルク", price: 800, desc: "コーヒー風味" },
+      { category: "COCKTAILS", name: "テキーラ ショット・ロック", price: 530, desc: "ショットまたはロック", image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b" },
+      { category: "COCKTAILS", name: "テキーラ サンライズ", price: 800, desc: "フルーティーな定番", image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b" },
+      { category: "COCKTAILS", name: "カンパリ オレンジ", price: 700, desc: "甘苦い定番", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
+      { category: "COCKTAILS", name: "カンパリ ソーダ", price: 700, desc: "すっきり飲みやすい", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
+      { category: "COCKTAILS", name: "スプモーニ", price: 800, desc: "カンパリ系の人気カクテル", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
+      { category: "COCKTAILS", name: "カシス オレンジ", price: 700, desc: "定番人気", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e" },
+      { category: "COCKTAILS", name: "カシス グレープ", price: 700, desc: "フルーティー", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e" },
+      { category: "COCKTAILS", name: "カシス ソーダ", price: 700, desc: "軽やかに飲める", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e" },
+      { category: "COCKTAILS", name: "レゲエパンチ", price: 700, desc: "ピーチ系の人気カクテル", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
+      { category: "COCKTAILS", name: "ファジーネーブル", price: 700, desc: "甘くて飲みやすい", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
+      { category: "COCKTAILS", name: "ラムコーク", price: 700, desc: "ラムの定番", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
+      { category: "COCKTAILS", name: "マリブミルク", price: 700, desc: "やさしい甘さ", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
+      { category: "COCKTAILS", name: "チャイナブルー", price: 800, desc: "華やかな香り", image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39" },
+      { category: "COCKTAILS", name: "スノーボール", price: 800, desc: "なめらかな口当たり", image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39" },
+      { category: "COCKTAILS", name: "カルーアミルク", price: 800, desc: "コーヒー風味", image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39" },
 
-      { category: "OTHERS & WINE", name: "梅酒ビア", price: 800, desc: "梅酒ベース" },
-      { category: "OTHERS & WINE", name: "梅エール", price: 800, desc: "梅酒ベース" },
-      { category: "OTHERS & WINE", name: "パトロンコーヒー", price: 950, desc: "パトロンベース", limited: true },
-      { category: "OTHERS & WINE", name: "パトロンミルク", price: 950, desc: "パトロンベース" },
-      { category: "OTHERS & WINE", name: "ワイン グラス", price: 700, desc: "グラスワイン" },
-      { category: "OTHERS & WINE", name: "ワイン ボトル", price: 3500, desc: "ボトルワイン", recommend: true },
+      { category: "OTHERS & WINE", name: "梅酒ビア", price: 800, desc: "梅酒ベース", image: "https://images.unsplash.com/photo-1551024709-8f23befc6cf7" },
+      { category: "OTHERS & WINE", name: "梅エール", price: 800, desc: "梅酒ベース", image: "https://images.unsplash.com/photo-1551024709-8f23befc6cf7" },
+      { category: "OTHERS & WINE", name: "パトロンコーヒー", price: 950, desc: "パトロンベース", limited: true, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
+      { category: "OTHERS & WINE", name: "パトロンミルク", price: 950, desc: "パトロンベース", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
+      { category: "OTHERS & WINE", name: "ワイン グラス", price: 700, desc: "グラスワイン", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3" },
+      { category: "OTHERS & WINE", name: "ワイン ボトル", price: 3500, desc: "ボトルワイン", recommend: true, image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3" },
 
-      { category: "NON ALCOHOL & SOFT DRINK", name: "サラトガクーラー", price: 600, desc: "ノンアルカクテル" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "シャーリーテンプル", price: 600, desc: "ノンアルカクテル" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "ヴァージンモヒート", price: 800, desc: "ノンアルカクテル" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "100%ジュース", price: 600, desc: "ソフトドリンク" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "お茶", price: 600, desc: "ソフトドリンク" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "コーラ", price: 600, desc: "ソフトドリンク" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "コーラフロート", price: 700, desc: "フロート", popular: true },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "コーヒーフロート", price: 700, desc: "フロート" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "ノンアルコールビール", price: 700, desc: "キリン零ICHI" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "サラトガクーラー", price: 600, desc: "ノンアルカクテル", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "シャーリーテンプル", price: 600, desc: "ノンアルカクテル", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "ヴァージンモヒート", price: 800, desc: "ノンアルカクテル", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "100%ジュース", price: 600, desc: "ソフトドリンク", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "お茶", price: 600, desc: "ソフトドリンク", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "コーラ", price: 600, desc: "ソフトドリンク", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "水", price: 0, desc: "自分のテーブル専用", selfOnly: true, image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "コーラフロート", price: 700, desc: "フロート", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "コーヒーフロート", price: 700, desc: "フロート", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
+      { category: "NON ALCOHOL & SOFT DRINK", name: "ノンアルコールビール", price: 700, desc: "キリン零ICHI", image: "https://images.unsplash.com/photo-1563379091339-03246963d29c" },
 
-      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥300", price: 300, desc: "スタッフへの応援（投げ銭）です", recommend: true, support: true },
-      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥500", price: 500, desc: "スタッフへの応援（投げ銭）です", support: true, popular: true },
-      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥1,000", price: 1000, desc: "スタッフへの応援（投げ銭）です", support: true }
+      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥300", price: 300, desc: "スタッフへの応援（投げ銭）です", recommend: true, support: true, image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4" },
+      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥500", price: 500, desc: "スタッフへの応援（投げ銭）です", support: true, image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4" },
+      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥1,000", price: 1000, desc: "スタッフへの応援（投げ銭）です", support: true, image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4" }
     ];
 
     let currentCategory = "BEER";
     let selectedItem = null;
     let quantity = 1;
     let cart = JSON.parse(localStorage.getItem("mocaCart")) || [];
-    let history = JSON.parse(localStorage.getItem("mocaHistory")) || [];
+    let loadingHistory = false;
+    let soldOutMap = {};
+    let popularTopMap = {};
+    let supportStats = {
+      todayCount: 0,
+      todayTotal: 0,
+      popularAmountLabel: "¥500"
+    };
+
+    async function fetchMenuFlags() {
+      const { data, error } = await supabaseClient
+        .from("menu_flags")
+        .select("*");
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      soldOutMap = {};
+      (data || []).forEach(row => {
+        soldOutMap[row.item_name] = !!row.sold_out;
+      });
+
+      renderMenu();
+    }
+
+    function subscribeMenuFlags() {
+      supabaseClient
+        .channel("menu-flags-realtime")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "menu_flags" },
+          async () => {
+            await fetchMenuFlags();
+          }
+        )
+        .subscribe();
+    }
+
+    async function fetchPopularityAndSupportStats() {
+      const { data, error } = await supabaseClient
+        .from("orders")
+        .select("item_name,item_category,order_type,subtotal,created_at");
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      const rows = data || [];
+      const categoryItemCounts = {};
+      const supportAmountCounts = {};
+      let todayCount = 0;
+      let todayTotal = 0;
+
+      const now = new Date();
+      const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+
+      rows.forEach(row => {
+        const category = row.item_category || "";
+        const itemName = row.item_name || "";
+
+        if (category && itemName && row.order_type !== "staff_support") {
+          if (!categoryItemCounts[category]) categoryItemCounts[category] = {};
+          categoryItemCounts[category][itemName] = (categoryItemCounts[category][itemName] || 0) + 1;
+        }
+
+        if (row.order_type === "staff_support") {
+          const d = new Date(row.created_at);
+          const rowDay = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+          if (rowDay === todayKey) {
+            todayCount += 1;
+            todayTotal += Number(row.subtotal || 0);
+          }
+
+          const amountLabel = itemName.replace("スタッフ応援ドリンク ", "");
+          supportAmountCounts[amountLabel] = (supportAmountCounts[amountLabel] || 0) + 1;
+        }
+      });
+
+      const topMap = {};
+      Object.keys(categoryItemCounts).forEach(category => {
+        let topName = "";
+        let topCount = -1;
+        Object.entries(categoryItemCounts[category]).forEach(([name, count]) => {
+          if (count > topCount) {
+            topCount = count;
+            topName = name;
+          }
+        });
+        if (topName) topMap[category] = topName;
+      });
+
+      let popularAmountLabel = "¥500";
+      let maxSupportCount = -1;
+      Object.entries(supportAmountCounts).forEach(([label, count]) => {
+        if (count > maxSupportCount) {
+          maxSupportCount = count;
+          popularAmountLabel = label;
+        }
+      });
+
+      popularTopMap = topMap;
+      supportStats = {
+        todayCount,
+        todayTotal,
+        popularAmountLabel
+      };
+
+      renderMenu();
+    }
+
+    function subscribeOrdersStats() {
+      supabaseClient
+        .channel("orders-stats-realtime")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "orders" },
+          async () => {
+            await fetchPopularityAndSupportStats();
+          }
+        )
+        .subscribe();
+    }
 
     function setupGiftTableOptions() {
       const select = document.getElementById("giftTarget");
@@ -504,12 +749,22 @@
       });
     }
 
+    function isSoldOut(item) {
+      if (typeof soldOutMap[item.name] === "boolean") return soldOutMap[item.name];
+      return !!item.soldOut;
+    }
+
+    function isTopPopular(item) {
+      return popularTopMap[item.category] === item.name;
+    }
+
     function getBadges(item) {
       let html = "";
-      if (item.recommend) html += `<span class="badge badge-recommend">おすすめ</span>`;
-      if (item.popular) html += `<span class="badge badge-popular">人気</span>`;
+      if (isTopPopular(item)) html += `<span class="badge badge-top1">人気No.1</span>`;
+      if (item.recommend) html += `<span class="badge badge-recommend">スタッフ推し</span>`;
       if (item.limited) html += `<span class="badge badge-limited">限定</span>`;
-      if (item.soldOut) html += `<span class="badge badge-soldout">SOLD OUT</span>`;
+      if (item.selfOnly) html += `<span class="badge badge-selfonly">自席のみ</span>`;
+      if (isSoldOut(item)) html += `<span class="badge badge-soldout">SOLD OUT</span>`;
       return html;
     }
 
@@ -522,10 +777,15 @@
       }
 
       if (currentCategory === "STAFF SUPPORT") {
-        let supportCards = items.filter(item => item.category === "STAFF SUPPORT");
+        const supportCards = items.filter(item => item.category === "STAFF SUPPORT");
         let html = `
           <div class="support-box">
-            「今日の接客、良かった！」「カクテルが美味しかった！」と思っていただけたら、スタッフへ応援（投げ銭）をいただけると励みになります。いただいたチップは全額、スタッフの研修や福利厚生に活用させていただきます。
+            「今日の接客、良かった！」「カクテルが美味しかった！」と思っていただけたら、スタッフへ応援(投げ銭)をいただけると励みになります。いただいたチップは全額、福利厚生に活用させていただきます。
+            <div class="support-stats">
+              <div>本日すでに <strong>${supportStats.todayCount}件</strong> の応援をいただいています 🙏</div>
+              <div>本日の応援合計は <strong>¥${Number(supportStats.todayTotal).toLocaleString()}</strong> です</div>
+              <div>人気の応援額は <strong>${escapeHtml(supportStats.popularAmountLabel)}</strong> です</div>
+            </div>
           </div>
           <div style="height:14px;"></div>
           <div class="menu-grid">
@@ -535,9 +795,9 @@
           html += `
             <div class="card" onclick="openItemModal(${idx})">
               <div class="badge-wrap">${getBadges(item)}</div>
-              <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4" alt="${item.name}">
-              <h3>${item.name}</h3>
-              <div class="desc">${item.desc}</div>
+              <img src="${item.image}" alt="${escapeHtml(item.name)}">
+              <h3 title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</h3>
+              <div class="desc">${escapeHtml(item.desc)}</div>
               <div class="price">¥${item.price.toLocaleString()}</div>
               <button type="button">選択する</button>
             </div>
@@ -553,14 +813,15 @@
       let html = `<div class="menu-grid">`;
       filtered.forEach(item => {
         const idx = items.indexOf(item);
+        const soldOut = isSoldOut(item);
         html += `
-          <div class="card ${item.soldOut ? 'soldout-card' : ''}" onclick="${item.soldOut ? '' : `openItemModal(${idx})`}">
+          <div class="card ${soldOut ? 'soldout-card' : ''}" onclick="${soldOut ? '' : `openItemModal(${idx})`}">
             <div class="badge-wrap">${getBadges(item)}</div>
-            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" alt="${item.name}">
-            <h3>${item.name}</h3>
-            <div class="desc">${item.desc}</div>
+            <img src="${item.image}" alt="${escapeHtml(item.name)}">
+            <h3 title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</h3>
+            <div class="desc">${escapeHtml(item.desc)}</div>
             <div class="price">¥${item.price.toLocaleString()}</div>
-            <button type="button" ${item.soldOut ? 'disabled' : ''}>${item.soldOut ? '売り切れ' : '選択する'}</button>
+            <button type="button" ${soldOut ? 'disabled' : ''}>${soldOut ? '売り切れ' : '選択する'}</button>
           </div>
         `;
       });
@@ -581,7 +842,7 @@
       document.getElementById("modalPrice").textContent = "¥" + selectedItem.price.toLocaleString();
 
       document.getElementById("drinkOptions").style.display = shouldShowMixOptions(selectedItem) ? "block" : "none";
-      document.getElementById("giftModeWrap").style.display = selectedItem.support ? "none" : "block";
+      document.getElementById("giftModeWrap").style.display = (selectedItem.support || selectedItem.selfOnly) ? "none" : "block";
       document.getElementById("giftTargetWrap").style.display = "none";
       document.getElementById("messageWrap").style.display = selectedItem.support ? "block" : "none";
 
@@ -621,7 +882,9 @@
 
       const giftMode = selectedItem.support
         ? "staff"
-        : (document.querySelector('input[name="giftMode"]:checked')?.value || "self");
+        : selectedItem.selfOnly
+          ? "self"
+          : (document.querySelector('input[name="giftMode"]:checked')?.value || "self");
 
       const targetTable = giftMode === "gift"
         ? document.getElementById("giftTarget").value
@@ -634,6 +897,7 @@
 
       cart.push({
         name: selectedItem.name,
+        category: selectedItem.category,
         price: selectedItem.price,
         desc: selectedItem.desc,
         mix,
@@ -644,12 +908,13 @@
         isGift: giftMode === "gift",
         support: selectedItem.support || false,
         supportMessage,
-        orderType
+        orderType,
+        selfOnly: selectedItem.selfOnly || false
       });
 
       localStorage.setItem("mocaCart", JSON.stringify(cart));
       closeItemModal();
-      alert(selectedItem.support ? "スタッフ応援をカートに追加しました" : "カートに追加しました");
+      showToast(selectedItem.support ? "スタッフ応援をカートに追加しました 💜" : "カートに追加しました");
     }
 
     function openCart() {
@@ -664,18 +929,18 @@
 
         cart.forEach(item => {
           total += item.subtotal;
-          html += `<div class="cart-item"><strong>${item.name}</strong>`;
+          html += `<div class="cart-item"><strong>${escapeHtml(item.name)}</strong>`;
 
-          if (item.mix) html += `<div class="small-text">割り方：${item.mix}</div>`;
+          if (item.mix) html += `<div class="small-text">割り方：${escapeHtml(item.mix)}</div>`;
           html += `<div class="small-text">数量：${item.quantity}</div>`;
 
           if (item.orderType === "gift") {
-            html += `<div class="small-text">届け先：Table ${item.targetTable}（Table ${item.fromTable} からの奢り）</div>`;
+            html += `<div class="small-text">届け先：Table ${escapeHtml(item.targetTable)}（Table ${escapeHtml(item.fromTable)} からの奢り）</div>`;
           } else if (item.orderType === "staff_support") {
             html += `<div class="small-text">区分：スタッフ応援</div>`;
-            if (item.supportMessage) html += `<div class="small-text">メッセージ：${item.supportMessage}</div>`;
+            if (item.supportMessage) html += `<div class="small-text">メッセージ：${escapeHtml(item.supportMessage)}</div>`;
           } else {
-            html += `<div class="small-text">届け先：Table ${item.targetTable}</div>`;
+            html += `<div class="small-text">届け先：Table ${escapeHtml(item.targetTable)}</div>`;
           }
 
           html += `<div class="small-text">小計：¥${item.subtotal.toLocaleString()}</div></div>`;
@@ -703,17 +968,17 @@
 
       cart.forEach(item => {
         total += item.subtotal;
-        html += `<div class="confirm-item"><strong>${item.name}</strong>`;
-        if (item.mix) html += `<div class="small-text">割り方：${item.mix}</div>`;
+        html += `<div class="confirm-item"><strong>${escapeHtml(item.name)}</strong>`;
+        if (item.mix) html += `<div class="small-text">割り方：${escapeHtml(item.mix)}</div>`;
         html += `<div class="small-text">数量：${item.quantity}</div>`;
 
         if (item.orderType === "gift") {
-          html += `<div class="small-text">届け先：Table ${item.targetTable}（Table ${item.fromTable} からの奢り）</div>`;
+          html += `<div class="small-text">届け先：Table ${escapeHtml(item.targetTable)}（Table ${escapeHtml(item.fromTable)} からの奢り）</div>`;
         } else if (item.orderType === "staff_support") {
           html += `<div class="small-text">区分：スタッフ応援</div>`;
-          if (item.supportMessage) html += `<div class="small-text">メッセージ：${item.supportMessage}</div>`;
+          if (item.supportMessage) html += `<div class="small-text">メッセージ：${escapeHtml(item.supportMessage)}</div>`;
         } else {
-          html += `<div class="small-text">届け先：Table ${item.targetTable}</div>`;
+          html += `<div class="small-text">届け先：Table ${escapeHtml(item.targetTable)}</div>`;
         }
 
         html += `<div class="small-text">小計：¥${item.subtotal.toLocaleString()}</div></div>`;
@@ -730,67 +995,127 @@
       document.getElementById("confirmModalBg").style.display = "none";
     }
 
-    function placeOrder() {
+    async function placeOrder() {
       if (cart.length === 0) {
         alert("カートが空です");
         return;
       }
 
-      const orderedAt = new Date().toLocaleString("ja-JP");
-      history.unshift({
-        orderedAt,
-        orderTable: tableNumber,
-        items: [...cart]
-      });
+      const rows = cart.map(item => ({
+        from_table: item.fromTable,
+        target_table: item.orderType === "staff_support" ? null : item.targetTable,
+        item_name: item.name,
+        item_category: item.category,
+        mix: item.mix || null,
+        quantity: item.quantity,
+        subtotal: item.subtotal,
+        order_type: item.orderType,
+        support_message: item.supportMessage || null,
+        status: "pending"
+      }));
 
-      localStorage.setItem("mocaHistory", JSON.stringify(history));
-      cart = [];
-      localStorage.setItem("mocaCart", JSON.stringify(cart));
+      const { error } = await supabaseClient.from("orders").insert(rows);
 
-      closeConfirmModal();
-      alert("注文が完了しました");
-    }
-
-    function openHistory() {
-      const historyItems = document.getElementById("historyItems");
-
-      if (history.length === 0) {
-        historyItems.innerHTML = `<p>注文履歴はありません</p>`;
-      } else {
-        let html = "";
-        history.forEach(order => {
-          html += `<div class="history-item"><strong>${order.orderedAt}</strong>`;
-          order.items.forEach(item => {
-            html += `<div class="small-text">${item.name}`;
-            if (item.mix) html += ` / ${item.mix}`;
-            html += ` / ${item.quantity}点`;
-
-            if (item.orderType === "gift") {
-              html += ` / Table ${item.targetTable}へ奢り`;
-            } else if (item.orderType === "staff_support") {
-              html += ` / スタッフ応援`;
-              if (item.supportMessage) html += ` / ${item.supportMessage}`;
-            } else {
-              html += ` / Table ${item.targetTable}`;
-            }
-
-            html += ` / ¥${item.subtotal.toLocaleString()}</div>`;
-          });
-          html += `</div>`;
-        });
-        historyItems.innerHTML = html;
+      if (error) {
+        console.error(error);
+        alert("注文保存でエラーが出ました");
+        return;
       }
 
+      cart = [];
+      localStorage.setItem("mocaCart", JSON.stringify(cart));
+      closeConfirmModal();
+      showToast("ご注文ありがとうございます 🍸");
+      await fetchPopularityAndSupportStats();
+    }
+
+    async function openHistory() {
+      const historyItems = document.getElementById("historyItems");
+      historyItems.innerHTML = `<div class="loading-box">読み込み中...</div>`;
       document.getElementById("historyModalBg").style.display = "flex";
+
+      if (loadingHistory) return;
+      loadingHistory = true;
+
+      const { data, error } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .eq("from_table", tableNumber)
+        .order("created_at", { ascending: false });
+
+      loadingHistory = false;
+
+      if (error) {
+        console.error(error);
+        historyItems.innerHTML = `<p>注文履歴の取得に失敗しました</p>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        historyItems.innerHTML = `<p>注文履歴はありません</p>`;
+        return;
+      }
+
+      let html = "";
+      data.forEach(item => {
+        html += `<div class="history-item"><strong>${escapeHtml(item.item_name)}</strong>`;
+        html += `<div class="small-text">${formatDate(item.created_at)}</div>`;
+        if (item.mix) html += `<div class="small-text">割り方：${escapeHtml(item.mix)}</div>`;
+        html += `<div class="small-text">数量：${item.quantity}</div>`;
+
+        if (item.order_type === "gift") {
+          html += `<div class="small-text">Table ${escapeHtml(item.target_table || "")} へ奢り</div>`;
+        } else if (item.order_type === "staff_support") {
+          html += `<div class="small-text">スタッフ応援</div>`;
+          if (item.support_message) html += `<div class="small-text">メッセージ：${escapeHtml(item.support_message)}</div>`;
+        } else {
+          html += `<div class="small-text">自分のテーブル用</div>`;
+        }
+
+        html += `<div class="small-text">小計：¥${Number(item.subtotal).toLocaleString()}</div>`;
+        html += `<div class="small-text">状態：${item.status === "done" ? "提供済み" : "未提供"}</div>`;
+        html += `</div>`;
+      });
+
+      historyItems.innerHTML = html;
     }
 
     function closeHistory() {
       document.getElementById("historyModalBg").style.display = "none";
     }
 
+    function formatDate(value) {
+      try {
+        return new Date(value).toLocaleString("ja-JP");
+      } catch {
+        return value;
+      }
+    }
+
+    function escapeHtml(text) {
+      return String(text ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
+    }
+
     setupGiftTableOptions();
     renderCategories();
     renderMenu();
+    fetchMenuFlags();
+    fetchPopularityAndSupportStats();
+    subscribeMenuFlags();
+    subscribeOrdersStats();
   </script>
 </body>
 </html>
