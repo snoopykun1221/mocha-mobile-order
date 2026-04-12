@@ -11,30 +11,29 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      color: #111;
+      color: #f5f5f5;
       background:
-        radial-gradient(circle at top, rgba(99,102,241,0.12), transparent 24%),
-        radial-gradient(circle at right top, rgba(236,72,153,0.10), transparent 22%),
-        linear-gradient(180deg, #efefef 0%, #e9e9e9 45%, #e2e2e2 100%);
+        radial-gradient(circle at top, rgba(120, 119, 198, 0.15), transparent 22%),
+        radial-gradient(circle at right top, rgba(255, 0, 128, 0.08), transparent 18%),
+        linear-gradient(135deg, #0f0f0f, #1a1a1a 45%, #111827 100%);
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(250,250,250,0.86);
+      background: rgba(0, 0, 0, 0.68);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      padding: 10px 14px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 10px 12px 8px;
       text-align: center;
     }
 
     header h1 {
       margin: 0;
-      font-size: 20px;
-      letter-spacing: 0.8px;
-      font-weight: 700;
-      color: #1d1d1d;
+      font-size: 21px;
+      letter-spacing: 2px;
+      color: #f5f5f5;
       text-transform: lowercase;
     }
 
@@ -43,23 +42,22 @@
       display: inline-block;
       padding: 6px 12px;
       border-radius: 999px;
-      background: #1e1e1e;
-      color: #fff;
+      background: linear-gradient(135deg, #d4af37, #f1d76a);
+      color: #000;
       font-size: 12px;
       font-weight: bold;
-      letter-spacing: 0.4px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
     }
 
     .top-buttons {
       display: flex;
       gap: 10px;
       padding: 10px 12px;
-      background: rgba(250,250,250,0.86);
+      background: rgba(0, 0, 0, 0.55);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
       position: sticky;
-      top: 55px;
+      top: 57px;
       z-index: 99;
     }
 
@@ -68,12 +66,12 @@
       padding: 11px;
       border: none;
       border-radius: 12px;
-      background: #202020;
-      color: #fff;
+      background: rgba(255,255,255,0.92);
+      color: #000;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.14);
     }
 
     .category-bar {
@@ -81,30 +79,29 @@
       gap: 8px;
       overflow-x: auto;
       padding: 10px 12px;
-      background: rgba(250,250,250,0.86);
+      background: rgba(0, 0, 0, 0.48);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
       position: sticky;
-      top: 107px;
+      top: 109px;
       z-index: 98;
     }
 
     .category-bar button {
       white-space: nowrap;
-      border: 1px solid rgba(0,0,0,0.12);
-      background: rgba(255,255,255,0.88);
-      color: #222;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: #ddd;
       border-radius: 999px;
       padding: 9px 13px;
       font-size: 12px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .category-bar button.active {
-      background: #202020;
-      color: #fff;
-      border-color: #202020;
+      background: #fff;
+      color: #000;
+      border-color: #fff;
     }
 
     .container {
@@ -119,37 +116,54 @@
 
     .card {
       position: relative;
-      border: 1px solid rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
       padding: 12px;
-      background: rgba(255,255,255,0.80);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.28);
       cursor: pointer;
+      overflow: hidden;
+      animation: fadeUp 0.35s ease;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:active {
+      transform: scale(0.98);
+    }
+
+    .img-wrap {
+      width: 100%;
+      height: 130px;
+      background: #f5f5f5;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
     }
 
-    .card img {
+    .img-wrap img {
       width: 100%;
-      height: 130px;
+      height: 100%;
       object-fit: contain;
-      border-radius: 12px;
-      background: #f5f5f5;
+      display: block;
     }
 
     .card h3 {
-      font-size: 14px;
+      font-size: 13px;
       margin: 12px 0 6px;
       line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       letter-spacing: 0.1px;
+      color: #fff;
     }
 
     .desc {
       font-size: 11px;
-      color: #666;
+      color: #bcbcbc;
       min-height: 32px;
       line-height: 1.35;
       margin-bottom: 8px;
@@ -159,14 +173,14 @@
       font-size: 15px;
       font-weight: bold;
       margin-bottom: 10px;
-      color: #1a1a1a;
+      color: #fff;
     }
 
     .card button {
       width: 100%;
       padding: 10px;
-      background: #202020;
-      color: #fff;
+      background: #fff;
+      color: #000;
       border: none;
       border-radius: 10px;
       font-size: 13px;
@@ -181,7 +195,8 @@
     }
 
     .soldout-card button {
-      background: #8f8f8f;
+      background: #7d7d7d;
+      color: #f3f3f3;
       cursor: not-allowed;
     }
 
@@ -205,44 +220,34 @@
       backdrop-filter: blur(8px);
     }
 
-    .badge-recommend { background: rgba(26,26,26,0.92); }
-    .badge-popular { background: rgba(163, 28, 28, 0.92); }
-    .badge-top1 { background: linear-gradient(135deg, rgba(245,158,11,0.96), rgba(239,68,68,0.96)); }
-    .badge-limited { background: rgba(132, 88, 24, 0.92); }
+    .badge-recommend { background: linear-gradient(135deg, #d4af37, #f1d76a); color: #000; }
+    .badge-popular { background: rgba(200, 0, 0, 0.92); }
+    .badge-limited { background: rgba(160, 90, 0, 0.92); }
     .badge-soldout { background: rgba(100,100,100,0.92); }
     .badge-selfonly { background: rgba(52, 88, 138, 0.92); }
 
     .empty-food, .support-box {
       padding: 20px;
-      border: 1px solid rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
-      background: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.06);
       backdrop-filter: blur(8px);
       line-height: 1.7;
-      color: #444;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      color: #e4e4e4;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.22);
     }
 
     .support-box {
-      border: 1px solid #8b5cf6;
-      box-shadow: 0 0 18px rgba(139,92,246,0.18), 0 8px 24px rgba(0,0,0,0.05);
-      background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(59,130,246,0.05));
-    }
-
-    .support-stats {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(0,0,0,0.08);
-      font-size: 13px;
-      color: #333;
-      line-height: 1.8;
+      border: 1px solid rgba(212, 175, 55, 0.55);
+      box-shadow: 0 0 18px rgba(212,175,55,0.12), 0 8px 24px rgba(0,0,0,0.22);
+      background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(212,175,55,0.04));
     }
 
     .modal-bg {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.58);
+      background: rgba(0,0,0,0.6);
       z-index: 300;
       align-items: center;
       justify-content: center;
@@ -256,11 +261,12 @@
       margin: auto;
       padding: 16px;
       overflow-y: auto;
-      background: rgba(255,255,255,0.96);
-      color: #111;
+      background: #1a1a1a;
+      color: #fff;
       border-radius: 20px;
-      box-shadow: 0 18px 42px rgba(0,0,0,0.18);
+      box-shadow: 0 18px 42px rgba(0,0,0,0.28);
       backdrop-filter: blur(12px);
+      transform: translateY(-6px);
     }
 
     #historyModalBg .modal {
@@ -273,7 +279,7 @@
     }
 
     .modal p {
-      color: #555;
+      color: #cfcfcf;
       line-height: 1.5;
       margin-top: 0;
     }
@@ -292,6 +298,7 @@
       display: block;
       margin: 8px 0;
       font-size: 15px;
+      color: #f2f2f2;
     }
 
     .qty-row {
@@ -304,7 +311,7 @@
     .qty-row button {
       width: 38px;
       height: 38px;
-      border: 1px solid rgba(0,0,0,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
       background: #fff;
       color: #111;
       border-radius: 10px;
@@ -317,6 +324,7 @@
       text-align: center;
       font-size: 18px;
       font-weight: bold;
+      color: #fff;
     }
 
     .modal-actions {
@@ -336,17 +344,17 @@
     }
 
     .btn-main {
-      background: #202020;
-      color: #fff;
+      background: #fff;
+      color: #000;
     }
 
     .btn-sub {
-      background: #ececec;
-      color: #111;
+      background: #333;
+      color: #fff;
     }
 
     .cart-item, .history-item, .confirm-item {
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       padding: 10px 0;
     }
 
@@ -355,7 +363,7 @@
     }
 
     .small-text {
-      color: #666;
+      color: #c9c9c9;
       font-size: 13px;
       margin-top: 4px;
       line-height: 1.5;
@@ -365,14 +373,16 @@
       margin: 16px 0;
       font-size: 18px;
       font-weight: bold;
+      color: #fff;
     }
 
     select, textarea {
       width: 100%;
       padding: 11px;
-      border: 1px solid rgba(0,0,0,0.14);
+      border: 1px solid rgba(255,255,255,0.16);
       border-radius: 12px;
-      background: #fff;
+      background: #111;
+      color: #fff;
       font-size: 15px;
     }
 
@@ -384,10 +394,10 @@
     .loading-box {
       padding: 14px;
       margin-top: 10px;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 12px;
-      color: #555;
+      color: #d0d0d0;
       text-align: center;
     }
 
@@ -396,13 +406,24 @@
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%);
-      background: #111;
-      color: #fff;
+      background: #fff;
+      color: #000;
       padding: 12px 18px;
       border-radius: 12px;
       font-size: 14px;
       z-index: 999;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.24);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -523,70 +544,422 @@
     ];
 
     const items = [
-      { category: "BEER", name: "ハートランド生", price: 800, desc: "柔らかな甘さと穏やかな苦味", recommend: true, image: "https://images.unsplash.com/photo-1563379091339-03246963d29c" },
-      { category: "BEER", name: "ハイネケン", price: 800, desc: "フルーティーでさっぱり", image: "https://images.unsplash.com/photo-1608270586620-248524c67de9" },
-      { category: "BEER", name: "コロナ", price: 800, desc: "すっきり爽快リゾートスタイル", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
-      { category: "BEER", name: "ギネス", price: 800, desc: "濃い琥珀色とクリーミーな泡", limited: true, image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699" },
+      {
+        category: "BEER",
+        name: "ハートランド",
+        price: 800,
+        desc: "柔らかな甘さと穏やかな苦味。素材の優しい味で飲みやすい。",
+        recommend: true,
+        image: "https://i.imgur.com/jHdD7Av.jpg"
+      },
+      {
+        category: "BEER",
+        name: "ハイネケン",
+        price: 800,
+        desc: "ホップがフルーティーでさっぱりとした味わい。",
+        image: "https://i.imgur.com/SP4Yxqu.jpg"
+      },
+      {
+        category: "BEER",
+        name: "コロナ",
+        price: 800,
+        desc: "すっきり爽快なリゾートスタイルのビール。",
+        popular: true,
+        image: "https://i.imgur.com/r3Z7cp5.jpg"
+      },
+      {
+        category: "BEER",
+        name: "ギネス",
+        price: 800,
+        desc: "濃い琥珀色と苦味。ホップの強い香りとクリーミーな泡が特徴。",
+        image: "https://i.imgur.com/994tT2x.jpg"
+      },
 
-      { category: "GIN & VODKA", name: "ジンベース", price: 800, desc: "リッキー、バック、トニック、ライム", recommend: true, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
-      { category: "GIN & VODKA", name: "タンカレー / ボンベイ", price: 800, desc: "オン・ザ・ロック", image: "https://images.unsplash.com/photo-1587223962930-cb7f31384c19" },
-      { category: "GIN & VODKA", name: "ウォッカベース", price: 800, desc: "ブルドック、ソルティドッグ、モスコミュール、スクリュードライバー", image: "https://images.unsplash.com/photo-1544145945-f90425340c7e" },
+      {
+        category: "GIN & VODKA",
+        name: "ジンベース",
+        price: 800,
+        desc: "リッキー、バック、トニック、ライム",
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
+      },
+      {
+        category: "GIN & VODKA",
+        name: "タンカレー / ボンベイ",
+        price: 800,
+        desc: "オン・ザ・ロック",
+        image: "https://images.unsplash.com/photo-1587223962930-cb7f31384c19"
+      },
+      {
+        category: "GIN & VODKA",
+        name: "ウォッカベース",
+        price: 800,
+        desc: "ブルドック、ソルティドッグ、モスコミュール、スクリュードライバー",
+        image: "https://images.unsplash.com/photo-1544145945-f90425340c7e"
+      },
 
-      { category: "WHISKY & BOURBON", name: "ハイボール", price: 700, desc: "定番のハイボール", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
-      { category: "WHISKY & BOURBON", name: "ビアハイボール / 梅酒ハイボール", price: 800, desc: "各￥800", image: "https://images.unsplash.com/photo-1470337458703-46ad1756a187" },
-      { category: "WHISKY & BOURBON", name: "バーボン", price: 700, desc: "アーリータイムス、ジャックダニエル、セブンクラウン等", image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8" },
-      { category: "WHISKY & BOURBON", name: "ジェームソン / バランタイン / グレングラント", price: 700, desc: "スコッチ・アイリッシュ", image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b" },
-      { category: "WHISKY & BOURBON", name: "タリスカー 10年", price: 1200, desc: "香り高い本格派", limited: true, image: "https://images.unsplash.com/photo-1613206485381-b028e578e5b9" },
-      { category: "WHISKY & BOURBON", name: "ラフロイグ 10年", price: 1400, desc: "個性の強いスモーキー感", soldOut: true, image: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b" },
+      {
+        category: "WHISKY & BOURBON",
+        name: "ハイボール",
+        price: 700,
+        desc: "定番のハイボール",
+        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b"
+      },
+      {
+        category: "WHISKY & BOURBON",
+        name: "ビアハイボール / 梅酒ハイボール",
+        price: 800,
+        desc: "各￥800",
+        image: "https://images.unsplash.com/photo-1470337458703-46ad1756a187"
+      },
+      {
+        category: "WHISKY & BOURBON",
+        name: "バーボン",
+        price: 700,
+        desc: "アーリータイムス、ジャックダニエル、セブンクラウン等",
+        image: "https://images.unsplash.com/photo-1527281400683-1aae777175f8"
+      },
+      {
+        category: "WHISKY & BOURBON",
+        name: "ジェームソン / バランタイン / グレングラント",
+        price: 700,
+        desc: "スコッチ・アイリッシュ",
+        image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b"
+      },
+      {
+        category: "WHISKY & BOURBON",
+        name: "タリスカー 10年",
+        price: 1200,
+        desc: "香り高い本格派",
+        limited: true,
+        image: "https://images.unsplash.com/photo-1613206485381-b028e578e5b9"
+      },
+      {
+        category: "WHISKY & BOURBON",
+        name: "ラフロイグ 10年",
+        price: 1400,
+        desc: "個性の強いスモーキー感",
+        soldOut: true,
+        image: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b"
+      },
 
-      { category: "MOJITO", name: "スタンダード モヒート", price: 950, desc: "定番の爽やかなモヒート", recommend: true, image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "マリブ モヒート", price: 950, desc: "トロピカルな香り", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "イタリアン モヒート", price: 950, desc: "すっきりした飲み口", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "パッシモ モヒート", price: 950, desc: "フルーティー", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "マンゴヤン モヒート", price: 950, desc: "マンゴーの甘み", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "ミドリ モヒート", price: 950, desc: "メロンリキュール使用", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "ルジェカシス モヒート", price: 950, desc: "カシス香る一杯", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "ティフィン モヒート", price: 950, desc: "紅茶系の香り", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "パイナップル モヒート", price: 950, desc: "南国感たっぷり", image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c" },
-      { category: "MOJITO", name: "シャルトリューズ モヒート", price: 1000, desc: "爽やかで贅沢な一杯", limited: true, image: "https://images.unsplash.com/photo-1570598912132-0ba1dc952b7d" },
+      {
+        category: "MOJITO",
+        name: "スタンダード モヒート",
+        price: 950,
+        desc: "定番の爽やかなモヒート",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "マリブ モヒート",
+        price: 950,
+        desc: "トロピカルな香り",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "イタリアン モヒート",
+        price: 950,
+        desc: "すっきりした飲み口",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "パッシモ モヒート",
+        price: 950,
+        desc: "フルーティー",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "マンゴヤン モヒート",
+        price: 950,
+        desc: "マンゴーの甘み",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "ミドリ モヒート",
+        price: 950,
+        desc: "メロンリキュール使用",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "ルジェカシス モヒート",
+        price: 950,
+        desc: "カシス香る一杯",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "ティフィン モヒート",
+        price: 950,
+        desc: "紅茶系の香り",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "パイナップル モヒート",
+        price: 950,
+        desc: "南国感たっぷり",
+        image: "https://images.unsplash.com/photo-1551751299-1b51cab2694c"
+      },
+      {
+        category: "MOJITO",
+        name: "シャルトリューズ モヒート",
+        price: 1000,
+        desc: "爽やかで贅沢な一杯",
+        limited: true,
+        image: "https://images.unsplash.com/photo-1570598912132-0ba1dc952b7d"
+      },
 
-      { category: "COCKTAILS", name: "テキーラ ショット・ロック", price: 530, desc: "ショットまたはロック", image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b" },
-      { category: "COCKTAILS", name: "テキーラ サンライズ", price: 800, desc: "フルーティーな定番", image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b" },
-      { category: "COCKTAILS", name: "カンパリ オレンジ", price: 700, desc: "甘苦い定番", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
-      { category: "COCKTAILS", name: "カンパリ ソーダ", price: 700, desc: "すっきり飲みやすい", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
-      { category: "COCKTAILS", name: "スプモーニ", price: 800, desc: "カンパリ系の人気カクテル", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b" },
-      { category: "COCKTAILS", name: "カシス オレンジ", price: 700, desc: "定番人気", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e" },
-      { category: "COCKTAILS", name: "カシス グレープ", price: 700, desc: "フルーティー", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e" },
-      { category: "COCKTAILS", name: "カシス ソーダ", price: 700, desc: "軽やかに飲める", image: "https://images.unsplash.com/photo-1497534446932-c925b458314e" },
-      { category: "COCKTAILS", name: "レゲエパンチ", price: 700, desc: "ピーチ系の人気カクテル", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
-      { category: "COCKTAILS", name: "ファジーネーブル", price: 700, desc: "甘くて飲みやすい", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
-      { category: "COCKTAILS", name: "ラムコーク", price: 700, desc: "ラムの定番", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
-      { category: "COCKTAILS", name: "マリブミルク", price: 700, desc: "やさしい甘さ", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
-      { category: "COCKTAILS", name: "チャイナブルー", price: 800, desc: "華やかな香り", image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39" },
-      { category: "COCKTAILS", name: "スノーボール", price: 800, desc: "なめらかな口当たり", image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39" },
-      { category: "COCKTAILS", name: "カルーアミルク", price: 800, desc: "コーヒー風味", image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39" },
+      {
+        category: "COCKTAILS",
+        name: "テキーラ ショット・ロック",
+        price: 530,
+        desc: "ショットまたはロック",
+        image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b"
+      },
+      {
+        category: "COCKTAILS",
+        name: "テキーラ サンライズ",
+        price: 800,
+        desc: "フルーティーな定番",
+        image: "https://images.unsplash.com/photo-1582819509237-df99fd887a2b"
+      },
+      {
+        category: "COCKTAILS",
+        name: "カンパリ オレンジ",
+        price: 700,
+        desc: "甘苦い定番",
+        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b"
+      },
+      {
+        category: "COCKTAILS",
+        name: "カンパリ ソーダ",
+        price: 700,
+        desc: "すっきり飲みやすい",
+        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b"
+      },
+      {
+        category: "COCKTAILS",
+        name: "スプモーニ",
+        price: 800,
+        desc: "カンパリ系の人気カクテル",
+        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b"
+      },
+      {
+        category: "COCKTAILS",
+        name: "カシス オレンジ",
+        price: 700,
+        desc: "定番人気",
+        image: "https://images.unsplash.com/photo-1497534446932-c925b458314e"
+      },
+      {
+        category: "COCKTAILS",
+        name: "カシス グレープ",
+        price: 700,
+        desc: "フルーティー",
+        image: "https://images.unsplash.com/photo-1497534446932-c925b458314e"
+      },
+      {
+        category: "COCKTAILS",
+        name: "カシス ソーダ",
+        price: 700,
+        desc: "軽やかに飲める",
+        image: "https://images.unsplash.com/photo-1497534446932-c925b458314e"
+      },
+      {
+        category: "COCKTAILS",
+        name: "レゲエパンチ",
+        price: 700,
+        desc: "ピーチ系の人気カクテル",
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
+      },
+      {
+        category: "COCKTAILS",
+        name: "ファジーネーブル",
+        price: 700,
+        desc: "甘くて飲みやすい",
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
+      },
+      {
+        category: "COCKTAILS",
+        name: "ラムコーク",
+        price: 700,
+        desc: "ラムの定番",
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
+      },
+      {
+        category: "COCKTAILS",
+        name: "マリブミルク",
+        price: 700,
+        desc: "やさしい甘さ",
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
+      },
+      {
+        category: "COCKTAILS",
+        name: "チャイナブルー",
+        price: 800,
+        desc: "華やかな香り",
+        image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39"
+      },
+      {
+        category: "COCKTAILS",
+        name: "スノーボール",
+        price: 800,
+        desc: "なめらかな口当たり",
+        image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39"
+      },
+      {
+        category: "COCKTAILS",
+        name: "カルーアミルク",
+        price: 800,
+        desc: "コーヒー風味",
+        image: "https://images.unsplash.com/photo-1575023782549-62ca0d244b39"
+      },
 
-      { category: "OTHERS & WINE", name: "梅酒ビア", price: 800, desc: "梅酒ベース", image: "https://images.unsplash.com/photo-1551024709-8f23befc6cf7" },
-      { category: "OTHERS & WINE", name: "梅エール", price: 800, desc: "梅酒ベース", image: "https://images.unsplash.com/photo-1551024709-8f23befc6cf7" },
-      { category: "OTHERS & WINE", name: "パトロンコーヒー", price: 950, desc: "パトロンベース", limited: true, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
-      { category: "OTHERS & WINE", name: "パトロンミルク", price: 950, desc: "パトロンベース", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" },
-      { category: "OTHERS & WINE", name: "ワイン グラス", price: 700, desc: "グラスワイン", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3" },
-      { category: "OTHERS & WINE", name: "ワイン ボトル", price: 3500, desc: "ボトルワイン", recommend: true, image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3" },
+      {
+        category: "OTHERS & WINE",
+        name: "梅酒ビア",
+        price: 800,
+        desc: "梅酒ベース",
+        image: "https://images.unsplash.com/photo-1551024709-8f23befc6cf7"
+      },
+      {
+        category: "OTHERS & WINE",
+        name: "梅エール",
+        price: 800,
+        desc: "梅酒ベース",
+        image: "https://images.unsplash.com/photo-1551024709-8f23befc6cf7"
+      },
+      {
+        category: "OTHERS & WINE",
+        name: "パトロンコーヒー",
+        price: 950,
+        desc: "パトロンベース",
+        limited: true,
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
+      },
+      {
+        category: "OTHERS & WINE",
+        name: "パトロンミルク",
+        price: 950,
+        desc: "パトロンベース",
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd"
+      },
+      {
+        category: "OTHERS & WINE",
+        name: "ワイン グラス",
+        price: 700,
+        desc: "グラスワイン",
+        image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3"
+      },
+      {
+        category: "OTHERS & WINE",
+        name: "ワイン ボトル",
+        price: 3500,
+        desc: "ボトルワイン",
+        image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3"
+      },
 
-      { category: "NON ALCOHOL & SOFT DRINK", name: "サラトガクーラー", price: 600, desc: "ノンアルカクテル", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "シャーリーテンプル", price: 600, desc: "ノンアルカクテル", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "ヴァージンモヒート", price: 800, desc: "ノンアルカクテル", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "100%ジュース", price: 600, desc: "ソフトドリンク", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "お茶", price: 600, desc: "ソフトドリンク", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "コーラ", price: 600, desc: "ソフトドリンク", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "水", price: 0, desc: "自分のテーブル専用", selfOnly: true, image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "コーラフロート", price: 700, desc: "フロート", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "コーヒーフロート", price: 700, desc: "フロート", image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18" },
-      { category: "NON ALCOHOL & SOFT DRINK", name: "ノンアルコールビール", price: 700, desc: "キリン零ICHI", image: "https://images.unsplash.com/photo-1563379091339-03246963d29c" },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "サラトガクーラー",
+        price: 600,
+        desc: "ノンアルカクテル",
+        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "シャーリーテンプル",
+        price: 600,
+        desc: "ノンアルカクテル",
+        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "ヴァージンモヒート",
+        price: 800,
+        desc: "ノンアルカクテル",
+        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "100%ジュース",
+        price: 600,
+        desc: "ソフトドリンク",
+        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "お茶",
+        price: 600,
+        desc: "ソフトドリンク",
+        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "コーラ",
+        price: 600,
+        desc: "ソフトドリンク",
+        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "水",
+        price: 0,
+        desc: "自分のテーブル専用",
+        selfOnly: true,
+        image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "コーラフロート",
+        price: 700,
+        desc: "フロート",
+        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "コーヒーフロート",
+        price: 700,
+        desc: "フロート",
+        image: "https://images.unsplash.com/photo-1542444592-0d7230d24b18"
+      },
+      {
+        category: "NON ALCOHOL & SOFT DRINK",
+        name: "ノンアルコールビール",
+        price: 700,
+        desc: "キリン零ICHI",
+        image: "https://images.unsplash.com/photo-1563379091339-03246963d29c"
+      },
 
-      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥300", price: 300, desc: "スタッフへの応援（投げ銭）です", recommend: true, support: true, image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4" },
-      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥500", price: 500, desc: "スタッフへの応援（投げ銭）です", support: true, image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4" },
-      { category: "STAFF SUPPORT", name: "スタッフ応援ドリンク ￥1,000", price: 1000, desc: "スタッフへの応援（投げ銭）です", support: true, image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4" }
+      {
+        category: "STAFF SUPPORT",
+        name: "スタッフ応援ドリンク ￥300",
+        price: 300,
+        desc: "スタッフへの応援（投げ銭）です",
+        support: true,
+        image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+      },
+      {
+        category: "STAFF SUPPORT",
+        name: "スタッフ応援ドリンク ￥500",
+        price: 500,
+        desc: "スタッフへの応援（投げ銭）です",
+        support: true,
+        image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+      },
+      {
+        category: "STAFF SUPPORT",
+        name: "スタッフ応援ドリンク ￥1,000",
+        price: 1000,
+        desc: "スタッフへの応援（投げ銭）です",
+        support: true,
+        image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+      }
     ];
 
     let currentCategory = "BEER";
@@ -595,12 +968,6 @@
     let cart = JSON.parse(localStorage.getItem("mocaCart")) || [];
     let loadingHistory = false;
     let soldOutMap = {};
-    let popularTopMap = {};
-    let supportStats = {
-      todayCount: 0,
-      todayTotal: 0,
-      popularAmountLabel: "¥500"
-    };
 
     async function fetchMenuFlags() {
       const { data, error } = await supabaseClient
@@ -628,93 +995,6 @@
           { event: "*", schema: "public", table: "menu_flags" },
           async () => {
             await fetchMenuFlags();
-          }
-        )
-        .subscribe();
-    }
-
-    async function fetchPopularityAndSupportStats() {
-      const { data, error } = await supabaseClient
-        .from("orders")
-        .select("item_name,item_category,order_type,subtotal,created_at");
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      const rows = data || [];
-      const categoryItemCounts = {};
-      const supportAmountCounts = {};
-      let todayCount = 0;
-      let todayTotal = 0;
-
-      const now = new Date();
-      const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-
-      rows.forEach(row => {
-        const category = row.item_category || "";
-        const itemName = row.item_name || "";
-
-        if (category && itemName && row.order_type !== "staff_support") {
-          if (!categoryItemCounts[category]) categoryItemCounts[category] = {};
-          categoryItemCounts[category][itemName] = (categoryItemCounts[category][itemName] || 0) + 1;
-        }
-
-        if (row.order_type === "staff_support") {
-          const d = new Date(row.created_at);
-          const rowDay = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-
-          if (rowDay === todayKey) {
-            todayCount += 1;
-            todayTotal += Number(row.subtotal || 0);
-          }
-
-          const amountLabel = itemName.replace("スタッフ応援ドリンク ", "");
-          supportAmountCounts[amountLabel] = (supportAmountCounts[amountLabel] || 0) + 1;
-        }
-      });
-
-      const topMap = {};
-      Object.keys(categoryItemCounts).forEach(category => {
-        let topName = "";
-        let topCount = -1;
-        Object.entries(categoryItemCounts[category]).forEach(([name, count]) => {
-          if (count > topCount) {
-            topCount = count;
-            topName = name;
-          }
-        });
-        if (topName) topMap[category] = topName;
-      });
-
-      let popularAmountLabel = "¥500";
-      let maxSupportCount = -1;
-      Object.entries(supportAmountCounts).forEach(([label, count]) => {
-        if (count > maxSupportCount) {
-          maxSupportCount = count;
-          popularAmountLabel = label;
-        }
-      });
-
-      popularTopMap = topMap;
-      supportStats = {
-        todayCount,
-        todayTotal,
-        popularAmountLabel
-      };
-
-      renderMenu();
-    }
-
-    function subscribeOrdersStats() {
-      supabaseClient
-        .channel("orders-stats-realtime")
-        .on(
-          "postgres_changes",
-          { event: "*", schema: "public", table: "orders" },
-          async () => {
-            await fetchPopularityAndSupportStats();
           }
         )
         .subscribe();
@@ -754,14 +1034,10 @@
       return !!item.soldOut;
     }
 
-    function isTopPopular(item) {
-      return popularTopMap[item.category] === item.name;
-    }
-
     function getBadges(item) {
       let html = "";
-      if (isTopPopular(item)) html += `<span class="badge badge-top1">人気No.1</span>`;
-      if (item.recommend) html += `<span class="badge badge-recommend">スタッフ推し</span>`;
+      if (item.recommend) html += `<span class="badge badge-recommend">おすすめ</span>`;
+      if (item.popular) html += `<span class="badge badge-popular">人気</span>`;
       if (item.limited) html += `<span class="badge badge-limited">限定</span>`;
       if (item.selfOnly) html += `<span class="badge badge-selfonly">自席のみ</span>`;
       if (isSoldOut(item)) html += `<span class="badge badge-soldout">SOLD OUT</span>`;
@@ -780,12 +1056,7 @@
         const supportCards = items.filter(item => item.category === "STAFF SUPPORT");
         let html = `
           <div class="support-box">
-            「今日の接客、良かった！」「カクテルが美味しかった！」と思っていただけたら、スタッフへ応援(投げ銭)をいただけると励みになります。いただいたチップは全額、福利厚生に活用させていただきます。
-            <div class="support-stats">
-              <div>本日すでに <strong>${supportStats.todayCount}件</strong> の応援をいただいています 🙏</div>
-              <div>本日の応援合計は <strong>¥${Number(supportStats.todayTotal).toLocaleString()}</strong> です</div>
-              <div>人気の応援額は <strong>${escapeHtml(supportStats.popularAmountLabel)}</strong> です</div>
-            </div>
+            「今日の接客、良かった！」「カクテルが美味しかった！」と思っていただけたら、スタッフへ応援(投げ銭)をいただけると励みになります。
           </div>
           <div style="height:14px;"></div>
           <div class="menu-grid">
@@ -796,24 +1067,8 @@
             <div class="card" onclick="openItemModal(${idx})">
               <div class="badge-wrap">${getBadges(item)}</div>
               <div class="img-wrap">
-              .img-wrap {
-  width: 100%;
-  height: 130px;
-  background: #f5f5f5;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-              <img src="${item.image}" alt="${escapeHtml(item.name)}">
-             </div>
+                <img src="${item.image}" alt="${escapeHtml(item.name)}">
+              </div>
               <h3 title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</h3>
               <div class="desc">${escapeHtml(item.desc)}</div>
               <div class="price">¥${item.price.toLocaleString()}</div>
@@ -835,7 +1090,11 @@
         html += `
           <div class="card ${soldOut ? 'soldout-card' : ''}" onclick="${soldOut ? '' : `openItemModal(${idx})`}">
             <div class="badge-wrap">${getBadges(item)}</div>
-            <img src="${item.image}" alt="${escapeHtml(item.name)}">
+            ${item.image ? `
+              <div class="img-wrap">
+                <img src="${item.image}" alt="${escapeHtml(item.name)}">
+              </div>
+            ` : ``}
             <h3 title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</h3>
             <div class="desc">${escapeHtml(item.desc)}</div>
             <div class="price">¥${item.price.toLocaleString()}</div>
@@ -932,7 +1191,7 @@
 
       localStorage.setItem("mocaCart", JSON.stringify(cart));
       closeItemModal();
-      showToast(selectedItem.support ? "スタッフ応援をカートに追加しました 💜" : "カートに追加しました");
+      showToast(selectedItem.support ? "スタッフ応援をカートに追加しました" : "カートに追加しました");
     }
 
     function openCart() {
@@ -1043,8 +1302,7 @@
       cart = [];
       localStorage.setItem("mocaCart", JSON.stringify(cart));
       closeConfirmModal();
-      showToast("ご注文ありがとうございます 🍸");
-      await fetchPopularityAndSupportStats();
+      showToast("ご注文ありがとうございます");
     }
 
     async function openHistory() {
@@ -1124,16 +1382,14 @@
       toast.className = "toast";
       toast.textContent = msg;
       document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 2000);
+      setTimeout(() => toast.remove(), 1800);
     }
 
     setupGiftTableOptions();
     renderCategories();
     renderMenu();
     fetchMenuFlags();
-    fetchPopularityAndSupportStats();
     subscribeMenuFlags();
-    subscribeOrdersStats();
   </script>
 </body>
 </html>
